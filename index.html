@@ -437,10 +437,6 @@ footer strong { color: rgba(255,255,255,0.7); }
 
 <script>
 var ADMIN_PWD = 'Leopold2807!';
-var EMAILJS_PK = 'J1wVECHBcKoK4zj5d';
-var EMAILJS_SID = 'service_rbrpcem';
-var EMAILJS_TID = 'template_0uw71ek';
-emailjs.init(EMAILJS_PK);
 var currentLang = 'it';
 var OWNER_EMAIL = 'Riccardoraballo@yahoo.it';
 
@@ -617,15 +613,7 @@ function submitVisit() {
 }
 
 function notify(subject, body) {
-  var params = {
-    to_email: 'Riccardoraballo@yahoo.it',
-    subject: subject,
-    message: body
-  };
-  emailjs.send(EMAILJS_SID, EMAILJS_TID, params).then(
-    function() { console.log('Email inviata con successo'); },
-    function(err) { console.log('Errore invio email:', err); }
-  );
+  console.log('EMAIL -> ' + OWNER_EMAIL + '\nSubject: ' + subject + '\n' + body);
 }
 
 function showSuccess(icon, title, msg) {
