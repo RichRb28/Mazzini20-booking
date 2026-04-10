@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Via Mazzini 20 — Affitto camere Torino</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue: #1a56db;
+  --dark: #1a1a2e;
+  --light: #f7f8ff;
+  --border: #eee;
+  --muted: #777;
+}
+body { font-family: 'DM Sans', -apple-system, sans-serif; background: #f5f4f0; color: #333; }
+
+/* NAV */
+nav { background: var(--dark); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.brand { font-family: 'Playfair Display', serif; color: #fff; font-size: 15px; font-weight: 600; letter-spacing: 0.3px; display: flex; align-items: baseline; gap: 4px; }
+.brand em { color: #4f9cf9; font-style: italic; font-size: 26px; }
+.nav-link { color: rgba(255,255,255,0.65); font-size: 12px; text-decoration: none; cursor: pointer; border: none; background: none; }
+.nav-link:hover { color: #fff; }
+.nav-cta { background: #4f9cf9; color: #fff; border: none; padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+/* HERO */
+.hero {
+  background: url('piazza_bodoni.jpg') top center / cover no-repeat;
+  padding: 90px 24px 80px;
+  text-align: center;
+  position: relative;
+}
+.hero-overlay { position: absolute; inset: 0; background: rgba(15,15,35,0.40); }
+.hero-content { position: relative; z-index: 1; }
+.hero-tag { display: inline-block; background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; }
+.hero h1 { font-size: 34px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 12px; letter-spacing: -0.5px; }
+.hero h1 em { color: #4f9cf9; font-style: normal; }
+.hero p { font-size: 14px; color: rgba(255,255,255,0.75); max-width: 520px; margin: 0 auto 28px; line-height: 1.7; }
+.hero-stats { display: flex; justify-content: center; gap: 32px; }
+.stat-num { font-size: 22px; font-weight: 800; color: #fff; }
+.stat-label { font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
+
+/* SECTIONS */
+.section { padding: 48px 24px; max-width: 860px; margin: 0 auto; }
+.sec-label { font-size: 11px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+.sec-heading { font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+.sec-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+
+/* FEATURES */
+.features { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 8px; }
+.feat { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.feat-icon { font-size: 44px; margin-bottom: 12px; }
+.feat h4 { font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
+.feat p { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* CALENDAR */
+.date-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ROOMS */
+.rooms { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.room-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: box-shadow 0.2s; }
+.room-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.room-img { height: 160px; background: linear-gradient(135deg,#e8ecff,#f0f4ff); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.room-img img { width: 100%; height: 100%; object-fit: cover; }
+.room-placeholder { text-align: center; color: #aaa; }
+.room-placeholder div { font-size: 32px; margin-bottom: 6px; }
+.room-placeholder p { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+.avail-badge { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+.avail { background: #d1fae5; color: #065f46; }
+.not-avail { background: #fee2e2; color: #991b1b; }
+.room-body { padding: 16px; }
+.room-name { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.room-desc { font-size: 11px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+.room-price { font-size: 20px; font-weight: 800; color: var(--blue); }
+.room-price span { font-size: 11px; font-weight: 400; color: var(--muted); }
+.room-from { font-size: 10px; color: var(--muted); margin-bottom: 12px; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+.tag { background: var(--light); color: var(--blue); font-size: 9.5px; font-weight: 500; padding: 3px 8px; border-radius: 20px; border: 1px solid #e0e8ff; }
+.rbtn { width: 100%; padding: 10px; border-radius: 9px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.rbtn-pri { background: var(--blue); color: #fff; }
+.rbtn-pri:hover { opacity: 0.88; }
+.rbtn-sec { background: #f5f5f5; color: #666; margin-top: 6px; }
+.rbtn-sec:hover { background: #eee; }
+.rbtn-dis { background: #f5f5f5; color: #bbb; cursor: not-allowed; }
+
+
+/* OVERLAYS */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; overflow-y: auto; padding: 20px; -webkit-overflow-scrolling: touch; }
+.overlay.open { display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.modal { background: #fff; border-radius: 18px; padding: 28px; width: 100%; max-width: 520px; margin: 10px auto; position: relative; max-height: 88vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.modal.wide { max-width: 700px; max-height: 88vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.modal h3 { font-size: 17px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.modal-sub { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+.close-x { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 22px; cursor: pointer; color: #999; line-height: 1; }
+.sec-title { font-size: 10px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 1.5px; margin: 16px 0 8px; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fgroup { margin-bottom: 10px; }
+.fgroup label { font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px; }
+.fgroup input, .fgroup select, .fgroup textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 9px; font-size: 12px; color: var(--dark); font-family: inherit; background: #fafaf8; }
+.fgroup input:focus, .fgroup select:focus, .fgroup textarea:focus { outline: none; border-color: var(--blue); }
+.fgroup textarea { resize: none; }
+.info-box { background: #e8f0fe; border: 1px solid #c0d4fb; border-radius: 9px; padding: 10px; font-size: 11px; color: var(--blue); margin-bottom: 14px; line-height: 1.6; }
+.upload-box { border: 2px dashed #ddd; border-radius: 9px; padding: 16px; text-align: center; cursor: pointer; background: #fafaf8; }
+.upload-box:hover { border-color: var(--blue); background: var(--light); }
+.upload-preview { font-size: 11px; color: #065f46; margin-top: 6px; font-weight: 500; }
+.btn-row { display: flex; gap: 10px; margin-top: 20px; }
+.btn-cancel { padding: 10px 16px; border: 1px solid var(--border); background: #fff; color: #666; border-radius: 9px; cursor: pointer; font-size: 12px; font-family: inherit; }
+.btn-submit { flex: 1; padding: 10px; background: var(--blue); color: #fff; border: none; border-radius: 9px; cursor: pointer; font-size: 12px; font-weight: 600; font-family: inherit; }
+.btn-submit:hover { opacity: 0.88; }
+
+/* GALLERY */
+.gal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.gal-img { position: relative; border-radius: 10px; overflow: hidden; height: 160px; }
+.gal-img img { width: 100%; height: 100%; object-fit: cover; }
+.gal-del { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 14px; cursor: pointer; line-height: 1; }
+.upload-label { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: #e8f0fe; color: var(--blue); border-radius: 9px; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 16px; border-top: 1px solid #eee; padding-top: 20px; }
+
+/* ADMIN */
+.admin-modal { background: #fff; border-radius: 18px; padding: 28px; width: 100%; max-width: 740px; margin: auto; position: relative; max-height: 88vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.admin-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.admin-head h3 { font-size: 17px; font-weight: 700; color: var(--dark); }
+.atabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.atab { padding: 7px 16px; border-radius: 20px; border: 1px solid var(--border); background: #fff; font-size: 12px; cursor: pointer; color: var(--muted); font-family: inherit; }
+.atab.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+.cand-item { background: #fafaf8; border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 10px; }
+.cand-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.cand-name { font-size: 14px; font-weight: 600; color: var(--dark); }
+.badge { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+.b-pending { background: #fef3c7; color: #92400e; }
+.b-approved { background: #d1fae5; color: #065f46; }
+.b-rejected { background: #fee2e2; color: #991b1b; }
+.b-confirmed { background: #d1fae5; color: #065f46; }
+.cand-info { font-size: 11px; color: var(--muted); line-height: 1.8; margin-bottom: 10px; }
+.cand-acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.act-approve { background: #d1fae5; color: #065f46; border: none; padding: 6px 12px; border-radius: 7px; font-size: 11px; font-weight: 600; cursor: pointer; }
+.act-reject { background: #fee2e2; color: #991b1b; border: none; padding: 6px 12px; border-radius: 7px; font-size: 11px; font-weight: 600; cursor: pointer; }
+.act-contact { background: #e8f0fe; color: var(--blue); border: none; padding: 6px 12px; border-radius: 7px; font-size: 11px; font-weight: 600; cursor: pointer; }
+.empty { text-align: center; padding: 40px; color: var(--muted); font-size: 13px; }
+.rtoggle { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #fafaf8; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; }
+.rtoggle-info { font-size: 13px; font-weight: 600; color: var(--dark); }
+.rtoggle-info small { font-size: 11px; font-weight: 400; color: var(--muted); display: block; }
+.toggle { width: 40px; height: 22px; background: #ddd; border-radius: 20px; position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+.toggle.on { background: #4f9cf9; }
+.toggle::after { content: ''; position: absolute; width: 16px; height: 16px; background: #fff; border-radius: 50%; top: 3px; left: 3px; transition: left 0.2s; }
+.toggle.on::after { left: 21px; }
+.foto-item { background: #fafaf8; border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+.foto-item-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.foto-thumb { width: 64px; height: 48px; border-radius: 6px; overflow: hidden; background: #e8ecff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.foto-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.foto-actions { display: flex; gap: 8px; }
+.foto-upload-label { flex: 1; padding: 8px; background: #e8f0fe; color: var(--blue); border-radius: 7px; font-size: 11px; font-weight: 600; text-align: center; cursor: pointer; }
+.foto-del { padding: 8px 12px; background: #fee2e2; color: #991b1b; border: none; border-radius: 7px; font-size: 11px; font-weight: 600; cursor: pointer; }
+
+/* LOGIN */
+.login-modal { background: #fff; border-radius: 16px; padding: 28px; width: 100%; max-width: 320px; margin: auto; position: relative; max-height: 90vh; overflow-y: auto; }
+.login-err { font-size: 11px; color: #991b1b; margin-top: 8px; display: none; }
+
+/* SUCCESS */
+.success-ov { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
+.success-ov.open { display: flex; }
+.success-box { background: #fff; border-radius: 16px; padding: 32px; text-align: center; max-width: 360px; width: 100%; }
+.success-icon { font-size: 48px; margin-bottom: 12px; }
+.success-box h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+.success-box p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+
+footer { background: var(--dark); padding: 24px; text-align: center; margin-top: 48px; }
+footer p { font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.8; }
+footer strong { color: rgba(255,255,255,0.7); }
+
+@media (max-width: 600px) {
+  .rooms, .features, .frow, .date-row, .gal-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 24px; }
+  .hero-stats { gap: 20px; }
+}
+
+/* LIGHTBOX */
+.lightbox-ov { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 600; align-items: center; justify-content: center; }
+.lightbox-ov.open { display: flex; }
+.lightbox-inner { position: relative; max-width: 92vw; max-height: 88vh; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.lightbox-img-wrap { width: 100%; display: flex; align-items: center; justify-content: center; }
+.lightbox-img-wrap img { max-width: 88vw; max-height: 72vh; border-radius: 10px; object-fit: contain; }
+.lightbox-close { position: fixed; top: 16px; right: 16px; background: rgba(255,255,255,0.15); border: none; color: #fff; font-size: 24px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.lightbox-nav { display: flex; gap: 12px; align-items: center; }
+.lightbox-prev, .lightbox-next { background: rgba(255,255,255,0.15); border: none; color: #fff; font-size: 20px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.lightbox-prev:hover, .lightbox-next:hover { background: rgba(255,255,255,0.3); }
+.lightbox-counter { color: rgba(255,255,255,0.6); font-size: 12px; font-family: 'DM Sans', sans-serif; }
+.lightbox-dots { display: flex; gap: 6px; }
+.lb-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; }
+.lb-dot.active { background: #fff; }
+.room-img { cursor: pointer; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="brand">Mazzini <em>20</em></div>
+  <div style="display:flex;align-items:center;gap:12px">
+  <button class="nav-link" onclick="openGallery()" id="nav-appartamento">Appartamento</button>
+  <button class="nav-link" onclick="switchLang()" id="lang-btn" style="border:1px solid rgba(255,255,255,0.25);padding:4px 10px;border-radius:12px;font-size:11px">EN</button>
+  </div>
+  <button class="nav-cta" onclick="openAdminLogin()">Admin</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Via Mazzini 20 &middot; Torino &middot; Centro</div>
+    <h1>Camere singole ad un passo<br>da <em>Piazza Bodoni</em></h1>
+    <p>Appartamento completamente ristrutturato nel 2026, arredato nuovo, tutto incluso. Per studenti e lavoratori.</p>
+    <div class="hero-stats">
+      <div><div class="stat-num">4</div><div class="stat-label">Camere</div></div>
+      <div><div class="stat-num">P.2</div><div class="stat-label">Ascensore</div></div>
+      <div><div class="stat-num">All-in</div><div class="stat-label">Spese incluse</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- APPARTAMENTO -->
+<div class="section">
+  <div class="sec-label">L&rsquo;appartamento</div>
+  <div class="sec-heading">Ristrutturato, arredato nuovo, tutto incluso</div>
+  <div class="sec-sub">Via Mazzini 20, secondo piano con ascensore, a pochi passi da Piazza Bodoni nel cuore di Torino.</div>
+  <div class="features">
+    <div class="feat"><div class="feat-icon">🛋️</div><h4>Arredi nuovi 2026</h4><p>Letto 1.5 piazze, scrivania ergonomica, armadio, libreria, luci dedicate</p></div>
+    <div class="feat"><div class="feat-icon">🪵</div><h4>Parquet in legno</h4><p>Parquet nelle camere, microcemento nelle parti comuni</p></div>
+    <div class="feat"><div class="feat-icon">🚿</div><h4>Bagno ristrutturato</h4><p>Doccia, lavello, WC, bidet, acqua calda da caldaia a gas nuova</p></div>
+    <div class="feat"><div class="feat-icon">👕</div><h4>Lavasciuga</h4><p>Lavasciuga condivisa — niente stendini in camera</p></div>
+    <div class="feat"><div class="feat-icon">📶</div><h4>Internet fibra</h4><p>Connessione fibra inclusa nel canone</p></div>
+    <div class="feat"><div class="feat-icon">📺</div><h4>Smart TV in cucina</h4><p>Cucina abitabile con Smart TV, macchina del caff&egrave;, microonde</p></div>
+    <div class="feat"><div class="feat-icon">🪟</div><h4>Infissi doppio vetro</h4><p>Serramenti moderni per isolamento termico e acustico</p></div>
+    <div class="feat"><div class="feat-icon">🚲</div><h4>Posteggio bici</h4><p>Cortile interno condominiale per il parcheggio biciclette</p></div>
+    <div class="feat"><div class="feat-icon">📱</div><h4>Portale inquilini</h4><p>App dedicata per guasti, servizi extra, rinnovi e assistenza h24</p></div>
+  </div>
+</div>
+
+<!-- CAMERE -->
+<div class="section">
+  <div class="sec-label">Disponibilit&agrave; camere</div>
+  <div class="sec-heading">Scegli la tua camera</div>
+  <div class="sec-sub">Camere disponibili da giugno 2026. Canoni all-inclusive — nessun costo aggiuntivo.</div>
+  <div class="rooms" id="rooms-grid"></div>
+</div>
+
+<footer>
+  <p><strong>Via Mazzini 20 &middot; Torino &middot; Piano 2</strong><br>Zona Piazza Bodoni &middot; Centro storico<br>Per informazioni usa la chat oppure prenota direttamente online</p>
+</footer>
+
+<!-- GALLERY OVERLAY -->
+<div class="overlay" id="gallery-ov">
+  <div class="modal wide">
+    <button class="close-x" onclick="closeGallery()">&#215;</button>
+    <h3>Appartamento &mdash; Zone comuni</h3>
+    <div class="modal-sub">Cucina, bagno, corridoio e parti comuni</div>
+    <div class="gal-grid" id="gal-grid"></div>
+<div style="padding-top:12px;border-top:1px solid #eee;font-size:11px;color:#aaa;text-align:center">Le foto vengono caricate dal proprietario. Altre foto in arrivo!</div>
+  </div>
+</div>
+
+<!-- CANDIDATURA OVERLAY -->
+<div class="overlay" id="cand-ov">
+  <div class="modal">
+    <button class="close-x" onclick="closeCand()">&#215;</button>
+    <h3>Candidatura &mdash; <span id="cand-room"></span></h3>
+    <div class="modal-sub">Compila il form — riceverai risposta entro 24 ore lavorative.</div>
+    <div class="info-box">💶 Deposito: <strong>1 mensilit&agrave;</strong> alla conferma. Canone all-inclusive: luce, gas, acqua, internet, condominio, TARI.</div>
+
+    <div class="sec-title">Dati personali</div>
+    <div class="frow">
+      <div class="fgroup"><label>Nome *</label><input type="text" id="f-nome" placeholder="Nome"></div>
+      <div class="fgroup"><label>Cognome *</label><input type="text" id="f-cognome" placeholder="Cognome"></div>
+    </div>
+    <div class="frow">
+      <div class="fgroup"><label>Data di nascita *</label><input type="date" id="f-nascita"></div>
+      <div class="fgroup"><label>Nazionalit&agrave; *</label><input type="text" id="f-naz" placeholder="es. Italiana"></div>
+    </div>
+    <div class="frow">
+      <div class="fgroup"><label>Email *</label><input type="email" id="f-email" placeholder="tua@email.com"></div>
+      <div class="fgroup"><label>Telefono *</label><input type="tel" id="f-tel" placeholder="+39 ..."></div>
+    </div>
+
+    <div class="sec-title">Situazione attuale</div>
+    <div class="fgroup">
+      <label>Studente o lavoratore? *</label>
+      <select id="f-tipo" onchange="toggleTipo()">
+        <option value="">— Seleziona —</option>
+        <option value="studente">Studente universitario</option>
+        <option value="lavoratore">Lavoratore / Trasfertista</option>
+        <option value="altro">Altro</option>
+      </select>
+    </div>
+    <div id="s-fields">
+      <div class="frow">
+        <div class="fgroup"><label>Universit&agrave;</label><input type="text" id="f-univ" placeholder="es. Politecnico di Torino"></div>
+        <div class="fgroup"><label>Corso</label><input type="text" id="f-corso" placeholder="es. Ingegneria"></div>
+      </div>
+    </div>
+    <div id="l-fields" style="display:none">
+      <div class="frow">
+        <div class="fgroup"><label>Azienda</label><input type="text" id="f-azienda" placeholder="Nome azienda"></div>
+        <div class="fgroup"><label>Ruolo</label><input type="text" id="f-ruolo" placeholder="es. Ingegnere"></div>
+      </div>
+    </div>
+
+    <div class="sec-title">Periodo richiesto</div>
+    <div class="frow">
+      <div class="fgroup"><label>Data ingresso *</label><input type="date" id="f-din" min="2026-06-01"></div>
+      <div class="fgroup"><label>Data uscita *</label><input type="date" id="f-dout" min="2026-07-01"></div>
+    </div>
+
+    <div class="sec-title">Presentati</div>
+    <div class="fgroup">
+      <label>Breve presentazione *</label>
+      <textarea id="f-bio" rows="3" placeholder="Chi sei e perch&eacute; cerchi alloggio a Torino..."></textarea>
+    </div>
+
+    <div class="sec-title">Documento d&rsquo;identit&agrave;</div>
+    <div class="upload-box" onclick="document.getElementById('doc-file').click()">
+      <div style="font-size:24px">📎</div>
+      <div style="font-size:12px;font-weight:600;color:#555;margin:4px 0">Carica documento d&rsquo;identit&agrave;</div>
+      <div style="font-size:11px;color:#999">Carta d&rsquo;identit&agrave; o passaporto (JPG, PNG, PDF — max 5MB)</div>
+      <div class="upload-preview" id="doc-preview"></div>
+    </div>
+    <input type="file" id="doc-file" accept=".jpg,.jpeg,.png,.pdf" style="display:none" onchange="handleDoc(this)">
+
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="closeCand()">Annulla</button>
+      <button class="btn-submit" onclick="submitCand()">Invia candidatura</button>
+    </div>
+  </div>
+</div>
+
+<!-- VISITA OVERLAY -->
+<div class="overlay" id="visit-ov">
+  <div class="modal">
+    <button class="close-x" onclick="closeVisit()">&#215;</button>
+    <h3>Prenota una visita</h3>
+    <div class="modal-sub">Vieni a vedere l&rsquo;appartamento — ti confermiamo entro 24 ore.</div>
+    <div class="frow">
+      <div class="fgroup"><label>Nome *</label><input type="text" id="v-nome" placeholder="Nome e cognome"></div>
+      <div class="fgroup"><label>Email *</label><input type="email" id="v-email" placeholder="tua@email.com"></div>
+    </div>
+    <div class="fgroup"><label>Telefono *</label><input type="tel" id="v-tel" placeholder="+39 ..."></div>
+    <div class="frow">
+      <div class="fgroup">
+        <label>Giorno preferito</label>
+        <select id="v-day">
+          <option value="">— Nessuna preferenza —</option>
+          <option>Luned&igrave;</option><option>Marted&igrave;</option><option>Mercoled&igrave;</option>
+          <option>Gioved&igrave;</option><option>Venerd&igrave;</option><option>Sabato</option>
+        </select>
+      </div>
+      <div class="fgroup">
+        <label>Fascia oraria</label>
+        <select id="v-time">
+          <option value="">— Nessuna preferenza —</option>
+          <option>Mattina (9-12)</option><option>Pomeriggio (14-17)</option><option>Sera (17-19)</option>
+        </select>
+      </div>
+    </div>
+    <div class="fgroup">
+      <label>Camera di interesse</label>
+      <select id="v-cam">
+        <option value="Nessuna preferenza">Nessuna — vedo tutto</option>
+        <option>Camera 1</option><option>Camera 2</option><option>Camera 3</option><option>Camera 4</option>
+      </select>
+    </div>
+    <div class="fgroup"><label>Note (opzionale)</label><textarea id="v-note" rows="2" placeholder="Eventuali domande..."></textarea></div>
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="closeVisit()">Annulla</button>
+      <button class="btn-submit" onclick="submitVisit()">Prenota visita</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN ADMIN -->
+<div class="overlay" id="login-ov" style="z-index:400">
+  <div class="login-modal">
+    <h3>🔐 Area admin</h3>
+    <p style="font-size:12px;color:var(--muted);margin:4px 0 16px">Accesso riservato al proprietario</p>
+    <div class="fgroup"><label>Password</label><input type="password" id="admin-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter') checkLogin()"></div>
+    <div class="login-err" id="login-err">Password non corretta</div>
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="closeAdminLogin()">Annulla</button>
+      <button class="btn-submit" onclick="checkLogin()">Accedi</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="overlay" id="admin-ov">
+  <div class="admin-modal">
+    <div class="admin-head">
+      <h3>🏠 Dashboard Admin — Via Mazzini 20</h3>
+      <button class="close-x" style="position:static;font-size:22px" onclick="closeAdmin()">&#215;</button>
+    </div>
+    <div class="atabs">
+      <button class="atab active" onclick="showTab('candidature',this)">Candidature</button>
+      <button class="atab" onclick="showTab('visite',this)">Visite</button>
+      <button class="atab" onclick="showTab('disponibilita',this)">Disponibilit&agrave;</button>
+      <button class="atab" onclick="showTab('foto',this)">Foto camere</button>
+      <button class="atab" onclick="showTab('appartamento',this)">Foto appartamento</button>
+    </div>
+    <div id="t-candidature"><div id="cand-list"></div></div>
+    <div id="t-visite" style="display:none"><div id="visit-list"></div></div>
+    <div id="t-disponibilita" style="display:none">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Attiva o disattiva la disponibilit&agrave; in tempo reale.</p>
+      <div id="avail-list"></div>
+    </div>
+    <div id="t-foto" style="display:none">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Carica le foto di ogni camera. Appaiono subito nel portale.</p>
+      <div id="foto-list"></div>
+    </div>
+    <div id="t-appartamento" style="display:none">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Carica le foto delle zone comuni (cucina, bagno, corridoio). Visibili cliccando "Appartamento" nel menu.</p>
+      <div id="common-foto-list"></div>
+      <button onclick="triggerCommonUpload()" style="display:inline-flex;align-items:center;gap:8px;padding:9px 16px;background:#e8f0fe;color:#1a56db;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;margin-top:12px;border:none;font-family:inherit">
+        📷 Aggiungi foto zone comuni
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-ov" id="success-ov" style="z-index:500">
+  <div class="success-box">
+    <div class="success-icon" id="s-icon">✅</div>
+    <h3 id="s-title"></h3>
+    <p id="s-msg"></p>
+    <button class="btn-submit" onclick="closeSuccess()">Chiudi</button>
+  </div>
+</div>
+
+<script>
+var ADMIN_PWD = 'Leopold2807!';
+var currentLang = 'it';
+var OWNER_EMAIL = 'Riccardoraballo@yahoo.it';
+
+var ROOMS = [
+  {id:1, name:'Camera 1', mq:'9.61', tags:['Finestra','Parquet','Arredata'], price:510, desc:'Camera singola accogliente, ideale per chi cerca una soluzione centrale a prezzo contenuto.'},
+  {id:2, name:'Camera 2', mq:'11.25', tags:['Finestra','Parquet','Arredata'], price:550, desc:'Camera luminosa con buona metratura, perfetta per studenti e lavoratori.'},
+  {id:3, name:'Camera 3', mq:'14.59', tags:['Balcone','Parquet','Arredata'], price:600, desc:'Camera spaziosa con balcone privato e ottima esposizione.'},
+  {id:4, name:'Camera 4', mq:'19.03', tags:['2 Balconi','Finestra','Parquet','Arredata'], price:680, desc:'La camera più grande con due balconi. La soluzione premium dell\'appartamento.'}
+];
+
+var availability = JSON.parse(localStorage.getItem('m20_avail') || '{"1":true,"2":true,"3":true,"4":true}');
+var candidature = JSON.parse(localStorage.getItem('m20_cand') || '[]');
+var visite = JSON.parse(localStorage.getItem('m20_visite') || '[]');
+var roomPhotos = JSON.parse(localStorage.getItem('m20_photos') || '{"1":[],"2":[],"3":[],"4":[]}');
+var commonPhotos = JSON.parse(localStorage.getItem('m20_common') || '[]');
+var selectedRoom = null;
+var docFile = null;
+
+window.onload = function() {
+  renderRooms();
+  // Bind room file inputs
+  for (var i = 0; i < ROOMS.length; i++) {
+    (function(rid) {
+      var inp = document.getElementById('room-file-' + rid);
+      if (inp) {
+        inp.addEventListener('change', function() {
+          if (this.files && this.files.length > 0) uploadRoomPhoto(rid, this);
+        });
+      }
+    })(ROOMS[i].id);
+  }
+  // Bind common photos input
+  var cinp = document.getElementById('common-file-input');
+  if (cinp) {
+    cinp.addEventListener('change', function() {
+      if (this.files && this.files.length > 0) uploadCommonPhoto(this);
+    });
+  }
+};
+
+function updateDates() {
+  if (din) {
+    document.getElementById('f-din').value = din;
+    }
+  if (dout) {
+    document.getElementById('f-dout').value = dout;
+  }
+}
+
+function renderRooms() {
+  var grid = document.getElementById('rooms-grid');
+  var html = '';
+  for (var i = 0; i < ROOMS.length; i++) {
+    var r = ROOMS[i];
+    var avail = availability[r.id];
+    var rPhotos = roomPhotos[r.id] || [];
+var hasPhotos = rPhotos.length > 0;
+var photoHtml = hasPhotos
+      ? '<img src="' + rPhotos[0] + '" alt="' + r.name + '">'
+      : '<div class="room-placeholder"><div>📷</div><p>Foto in arrivo</p></div>';
+var photoCount = hasPhotos && rPhotos.length > 1 ? '<div style="position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,0.55);color:#fff;font-size:10px;font-weight:600;padding:3px 8px;border-radius:12px;">📷 ' + rPhotos.length + '</div>' : '';
+var photoClick = hasPhotos ? ' onclick="openLightbox(' + r.id + ')"' : '';
+    var tagsHtml = '';
+    for (var j = 0; j < r.tags.length; j++) {
+      tagsHtml += '<span class="tag">' + r.tags[j] + '</span>';
+    }
+    tagsHtml += '<span class="tag">All-inclusive</span>';
+    var btnLabel1 = currentLang === 'it' ? 'Candidati per questa camera' : 'Apply for this room';
+var btnLabel2 = currentLang === 'it' ? 'Prenota visita' : 'Book a visit';
+var btnDis = currentLang === 'it' ? 'Non disponibile' : 'Not available';
+var fromLabel = currentLang === 'it' ? 'All-inclusive · Da giugno 2026' : 'All-inclusive · From June 2026';
+var btnsHtml = avail
+      ? '<button class="rbtn rbtn-pri" onclick="openCand(' + r.id + ')">' + btnLabel1 + '</button><button class="rbtn rbtn-sec" onclick="openVisit(' + r.id + ')">' + btnLabel2 + '</button>'
+      : '<button class="rbtn rbtn-dis" disabled>' + btnDis + '</button>';
+    html += '<div class="room-card">';
+    html += '<div class="room-img"' + photoClick + '>' + photoHtml + photoCount + '<span class="avail-badge ' + (avail ? 'avail' : 'not-avail') + '">' + (avail ? 'Disponibile' : 'Occupata') + '</span></div>';
+    html += '<div class="room-body">';
+    html += '<div class="room-name">' + r.name + '</div>';
+    html += '<div class="room-desc">' + r.mq + ' mq &middot; ' + r.desc + '</div>';
+    html += '<div class="room-price">&euro;' + r.price + '<span>/mese</span></div>';
+    html += '<div class="room-from">' + fromLabel + '</div>';
+    html += '<div class="tags">' + tagsHtml + '</div>';
+    html += btnsHtml;
+    html += '</div></div>';
+  }
+  grid.innerHTML = html;
+}
+
+function openCand(id) {
+  for (var i = 0; i < ROOMS.length; i++) {
+    if (ROOMS[i].id === id) { selectedRoom = ROOMS[i]; break; }
+  }
+  document.getElementById('cand-room').textContent = selectedRoom.name;
+  document.getElementById('cand-ov').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCand() { document.getElementById('cand-ov').classList.remove('open'); document.body.style.overflow = ''; }
+
+function openVisit(id) {
+  if (id) {
+    for (var i = 0; i < ROOMS.length; i++) {
+      if (ROOMS[i].id === id) { document.getElementById('v-cam').value = ROOMS[i].name; break; }
+    }
+  }
+  document.getElementById('visit-ov').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeVisit() { document.getElementById('visit-ov').classList.remove('open'); document.body.style.overflow = ''; }
+
+function toggleTipo() {
+  var tipo = document.getElementById('f-tipo').value;
+  document.getElementById('s-fields').style.display = tipo === 'studente' ? 'block' : 'none';
+  document.getElementById('l-fields').style.display = tipo === 'lavoratore' ? 'block' : 'none';
+}
+
+function handleDoc(input) {
+  var file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { alert('File troppo grande. Max 5MB.'); return; }
+  docFile = file;
+  document.getElementById('doc-preview').textContent = '✓ ' + file.name;
+}
+
+function submitCand() {
+  var nome = document.getElementById('f-nome').value.trim();
+  var cognome = document.getElementById('f-cognome').value.trim();
+  var email = document.getElementById('f-email').value.trim();
+  var tel = document.getElementById('f-tel').value.trim();
+  var tipo = document.getElementById('f-tipo').value;
+  var din = document.getElementById('f-din').value;
+  var dout = document.getElementById('f-dout').value;
+  var bio = document.getElementById('f-bio').value.trim();
+  if (!nome || !cognome || !email || !tel || !tipo || !din || !dout || !bio) {
+    alert('Compila tutti i campi obbligatori (*)'); return;
+  }
+  var c = {
+    id: Date.now(), nome: nome + ' ' + cognome, email: email, tel: tel, tipo: tipo,
+    camera: selectedRoom.name, prezzo: selectedRoom.price, din: din, dout: dout, bio: bio,
+    doc: docFile ? docFile.name : 'Non caricato',
+    univ: document.getElementById('f-univ').value,
+    azienda: document.getElementById('f-azienda').value,
+    status: 'pending', ts: new Date().toLocaleString('it-IT')
+  };
+  candidature.push(c);
+  localStorage.setItem('m20_cand', JSON.stringify(candidature));
+  notify('[Mazzini 20] Candidatura: ' + selectedRoom.name,
+    'Nome: ' + c.nome + '\nEmail: ' + c.email + '\nTel: ' + c.tel + '\nTipo: ' + c.tipo +
+    '\nCamera: ' + c.camera + ' (€' + c.prezzo + '/mese)\nPeriodo: ' + c.din + ' -> ' + c.dout +
+    '\nDocumento: ' + c.doc + '\nPresentazione: ' + c.bio);
+  closeCand();
+  showSuccess('✅', 'Candidatura inviata!', 'Abbiamo ricevuto la tua candidatura. Ti risponderemo entro 24 ore lavorative.');
+}
+
+function submitVisit() {
+  var nome = document.getElementById('v-nome').value.trim();
+  var email = document.getElementById('v-email').value.trim();
+  var tel = document.getElementById('v-tel').value.trim();
+  if (!nome || !email || !tel) { alert('Compila nome, email e telefono.'); return; }
+  var v = {
+    id: Date.now(), nome: nome, email: email, tel: tel,
+    day: document.getElementById('v-day').value || 'Nessuna',
+    time: document.getElementById('v-time').value || 'Nessuna',
+    camera: document.getElementById('v-cam').value,
+    note: document.getElementById('v-note').value,
+    status: 'pending', ts: new Date().toLocaleString('it-IT')
+  };
+  visite.push(v);
+  localStorage.setItem('m20_visite', JSON.stringify(visite));
+  notify('[Mazzini 20] Visita: ' + v.camera,
+    'Nome: ' + v.nome + '\nEmail: ' + v.email + '\nTel: ' + v.tel +
+    '\nCamera: ' + v.camera + '\nGiorno: ' + v.day + '\nOrario: ' + v.time);
+  closeVisit();
+  showSuccess('📅', 'Visita richiesta!', 'Ti contatteremo entro 24 ore per confermare data e orario.');
+}
+
+function notify(subject, body) {
+  console.log('EMAIL -> ' + OWNER_EMAIL + '\nSubject: ' + subject + '\n' + body);
+}
+
+function showSuccess(icon, title, msg) {
+  document.getElementById('s-icon').textContent = icon;
+  document.getElementById('s-title').textContent = title;
+  document.getElementById('s-msg').textContent = msg;
+  document.getElementById('success-ov').classList.add('open');
+}
+function closeSuccess() { document.getElementById('success-ov').classList.remove('open'); }
+
+function openGallery() {
+  renderGallery();
+  document.getElementById('gallery-ov').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeGallery() { document.getElementById('gallery-ov').classList.remove('open'); document.body.style.overflow = ''; }
+
+function renderGallery() {
+  var grid = document.getElementById('gal-grid');
+  if (commonPhotos.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa;font-size:13px">📷 Nessuna foto ancora caricata. Disponibili presto.</div>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < commonPhotos.length; i++) {
+    html += '<div class="gal-img"><img src="' + commonPhotos[i] + '"></div>';
+  }
+  grid.innerHTML = html;
+}
+
+function uploadCommonPhoto(input) {
+  var files = Array.from(input.files);
+  if (!files || files.length === 0) return;
+  var count = 0;
+  var total = files.length;
+  for (var i = 0; i < total; i++) {
+    (function(file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        if (e.target && e.target.result) {
+          commonPhotos.push(e.target.result);
+        }
+        count++;
+        if (count === total) {
+          try { localStorage.setItem('m20_common', JSON.stringify(commonPhotos)); } catch(ex) {}
+          renderGallery();
+          var tab = document.getElementById('t-appartamento');
+          if (tab && tab.style.display !== 'none') renderCommonFotoAdmin();
+        }
+      };
+      reader.onerror = function() {
+        count++;
+        if (count === total) { renderGallery(); }
+      };
+      reader.readAsDataURL(file);
+    })(files[i]);
+  }
+}
+function removeCommonPhoto(i) {
+  commonPhotos.splice(i, 1);
+  localStorage.setItem('m20_common', JSON.stringify(commonPhotos));
+  renderGallery();
+}
+
+function openAdminLogin() {
+  document.getElementById('admin-pwd').value = '';
+  document.getElementById('login-err').style.display = 'none';
+  document.getElementById('login-ov').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  
+  
+}
+function closeAdminLogin() { document.getElementById('login-ov').classList.remove('open'); document.body.style.overflow = ''; }
+
+function checkLogin() {
+  if (document.getElementById('admin-pwd').value === ADMIN_PWD) {
+    closeAdminLogin();
+    renderAdmin();
+    document.getElementById('admin-ov').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+  }
+}
+function closeAdmin() { document.getElementById('admin-ov').classList.remove('open'); document.body.style.overflow = ''; }
+
+function showTab(tab, btn) {
+  var tabs = ['candidature','visite','disponibilita','foto','appartamento'];
+  document.querySelectorAll('.atab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  for (var i = 0; i < tabs.length; i++) {
+    document.getElementById('t-' + tabs[i]).style.display = tabs[i] === tab ? 'block' : 'none';
+  }
+  if (tab === 'foto') renderFotoAdmin();
+  if (tab === 'appartamento') renderCommonFotoAdmin();
+}
+
+function renderAdmin() {
+  var cl = document.getElementById('cand-list');
+  if (candidature.length === 0) {
+    cl.innerHTML = '<div class="empty">Nessuna candidatura ricevuta</div>';
+  } else {
+    var html = '';
+    for (var i = 0; i < candidature.length; i++) {
+      var c = candidature[i];
+      var badgeClass = c.status === 'approved' ? 'b-approved' : c.status === 'rejected' ? 'b-rejected' : 'b-pending';
+      var badgeLabel = c.status === 'approved' ? 'Approvato' : c.status === 'rejected' ? 'Rifiutato' : 'In attesa';
+      html += '<div class="cand-item"><div class="cand-head"><div class="cand-name">' + c.nome + '</div>';
+      html += '<span class="badge ' + badgeClass + '">' + badgeLabel + '</span></div>';
+      html += '<div class="cand-info">📌 <strong>' + c.camera + '</strong> — €' + c.prezzo + '/mese<br>';
+      html += '📅 ' + c.din + ' → ' + c.dout + '<br>👤 ' + c.tipo;
+      if (c.univ) html += ' · ' + c.univ;
+      if (c.azienda) html += ' · ' + c.azienda;
+      html += '<br>📧 ' + c.email + ' · 📞 ' + c.tel + '<br>📎 ' + c.doc + '<br>💬 "' + c.bio + '"<br>🕐 ' + c.ts + '</div>';
+      html += '<div class="cand-acts">';
+      html += '<button class="act-approve" onclick="updateCand(' + i + ',\'approved\')">✓ Approva</button>';
+      html += '<button class="act-reject" onclick="updateCand(' + i + ',\'rejected\')">✗ Rifiuta</button>';
+      html += '<button class="act-contact" onclick="location.href=\'mailto:' + c.email + '\'">📧 Contatta</button>';
+      html += '</div></div>';
+    }
+    cl.innerHTML = html;
+  }
+
+  var vl = document.getElementById('visit-list');
+  if (visite.length === 0) {
+    vl.innerHTML = '<div class="empty">Nessuna visita richiesta</div>';
+  } else {
+    var vhtml = '';
+    for (var i = 0; i < visite.length; i++) {
+      var v = visite[i];
+      var vBadge = v.status === 'confirmed' ? 'b-confirmed' : 'b-pending';
+      var vLabel = v.status === 'confirmed' ? 'Confermata' : 'Da confermare';
+      vhtml += '<div class="cand-item"><div class="cand-head"><div class="cand-name">' + v.nome + '</div>';
+      vhtml += '<span class="badge ' + vBadge + '">' + vLabel + '</span></div>';
+      vhtml += '<div class="cand-info">📌 ' + v.camera + '<br>📅 ' + v.day + ' · ' + v.time;
+      vhtml += '<br>📧 ' + v.email + ' · 📞 ' + v.tel;
+      if (v.note) vhtml += '<br>💬 ' + v.note;
+      vhtml += '<br>🕐 ' + v.ts + '</div>';
+      vhtml += '<div class="cand-acts">';
+      vhtml += '<button class="act-approve" onclick="updateVisit(' + i + ',\'confirmed\')">✓ Conferma</button>';
+      vhtml += '<button class="act-contact" onclick="location.href=\'mailto:' + v.email + '\'">📧 Contatta</button>';
+      vhtml += '</div></div>';
+    }
+    vl.innerHTML = vhtml;
+  }
+
+  var al = document.getElementById('avail-list');
+  var ahtml = '';
+  for (var i = 0; i < ROOMS.length; i++) {
+    var r = ROOMS[i];
+    ahtml += '<div class="rtoggle"><div class="rtoggle-info">' + r.name + '<small>' + r.mq + ' mq · €' + r.price + '/mese</small></div>';
+    ahtml += '<div class="toggle ' + (availability[r.id] ? 'on' : '') + '" onclick="toggleAvail(' + r.id + ',this)"></div></div>';
+  }
+  al.innerHTML = ahtml;
+}
+
+
+function renderCommonFotoAdmin() {
+  var fl = document.getElementById('common-foto-list');
+  if (!fl) return;
+  if (commonPhotos.length === 0) {
+    fl.innerHTML = '<div style="text-align:center;padding:16px;color:#aaa;font-size:12px;background:#fafaf8;border-radius:8px;margin-bottom:10px">Nessuna foto caricata</div>';
+    return;
+  }
+  var html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">';
+  for (var i = 0; i < commonPhotos.length; i++) {
+    html += '<div style="position:relative;border-radius:6px;overflow:hidden;height:80px">';
+    html += '<img src="' + commonPhotos[i] + '" style="width:100%;height:100%;object-fit:cover">';
+    html += '<button onclick="removeCommonPhoto(' + i + ');renderCommonFotoAdmin();" style="position:absolute;top:3px;right:3px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;line-height:1">×</button>';
+    html += '</div>';
+  }
+  html += '</div><div style="font-size:10px;color:#aaa">' + commonPhotos.length + ' foto caricate</div>';
+  fl.innerHTML = html;
+}
+
+function renderFotoAdmin() {
+  var fl = document.getElementById('foto-list');
+  var html = '';
+  for (var i = 0; i < ROOMS.length; i++) {
+    var r = ROOMS[i];
+    var photos = roomPhotos[r.id] || [];
+    html += '<div class="foto-item">';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">';
+    html += '<div><div style="font-size:13px;font-weight:600;color:#1a1a2e">' + r.name + '</div>';
+    html += '<div style="font-size:11px;color:#777">' + r.mq + ' mq · €' + r.price + '/mese · ' + photos.length + ' foto</div></div>';
+    html += '<button class="foto-upload-label" style="flex:none;border:none;font-family:inherit;cursor:pointer;" onclick="triggerRoomUpload(' + r.id + ')">📷 Aggiungi foto</button>';
+    html += '</div>';
+    if (photos.length > 0) {
+      html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px">';
+      for (var j = 0; j < photos.length; j++) {
+        html += '<div style="position:relative;border-radius:6px;overflow:hidden;height:70px">';
+        html += '<img src="' + photos[j] + '" style="width:100%;height:100%;object-fit:cover">';
+        html += '<button onclick="removeRoomPhoto(' + r.id + ',' + j + ')" style="position:absolute;top:3px;right:3px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;line-height:1">×</button>';
+        if (j === 0) html += '<div style="position:absolute;bottom:3px;left:3px;background:rgba(26,86,219,0.8);color:#fff;font-size:8px;font-weight:600;padding:1px 5px;border-radius:3px">COVER</div>';
+        html += '</div>';
+      }
+      html += '</div>';
+      html += '<div style="font-size:10px;color:#aaa">La prima foto è usata come cover nella scheda camera</div>';
+    } else {
+      html += '<div style="text-align:center;padding:16px;color:#aaa;font-size:12px;background:#fafaf8;border-radius:8px">Nessuna foto caricata</div>';
+    }
+    html += '</div>';
+  }
+  fl.innerHTML = html;
+
+}
+
+function triggerRoomUpload(id) {
+  var inp = document.getElementById('room-file-' + id);
+  if (inp) { inp.value = ''; inp.click(); }
+}
+
+function triggerCommonUpload() {
+  var inp = document.getElementById('common-file-input');
+  if (inp) { inp.value = ''; inp.click(); }
+}
+
+function uploadRoomPhoto(id, input) {
+  var files = Array.from(input.files);
+  if (!roomPhotos[id]) roomPhotos[id] = [];
+  var loaded = 0;
+  if (files.length === 0) return;
+  for (var i = 0; i < files.length; i++) {
+    (function(file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        roomPhotos[id].push(e.target.result);
+        loaded++;
+        if (loaded === files.length) {
+          try {
+            localStorage.setItem('m20_photos', JSON.stringify(roomPhotos));
+          } catch(ex) {
+            roomPhotos[id].splice(roomPhotos[id].length - loaded, loaded);
+            alert('Spazio memoria esaurito. Rimuovi alcune foto e riprova.');
+          }
+          renderFotoAdmin();
+          renderRooms();
+        }
+      };
+      reader.onerror = function() {
+        loaded++;
+        if (loaded === files.length) { renderFotoAdmin(); renderRooms(); }
+      };
+      reader.readAsDataURL(file);
+    })(files[i]);
+  }
+}
+function removeRoomPhoto(id, idx) {
+  if (!roomPhotos[id]) return;
+  roomPhotos[id].splice(idx, 1);
+  localStorage.setItem('m20_photos', JSON.stringify(roomPhotos));
+  renderFotoAdmin();
+  renderRooms();
+}
+
+function updateCand(i, status) {
+  candidature[i].status = status;
+  localStorage.setItem('m20_cand', JSON.stringify(candidature));
+  renderAdmin();
+}
+function updateVisit(i, status) {
+  visite[i].status = status;
+  localStorage.setItem('m20_visite', JSON.stringify(visite));
+  renderAdmin();
+}
+function toggleAvail(id, el) {
+  availability[id] = !availability[id];
+  el.classList.toggle('on');
+  localStorage.setItem('m20_avail', JSON.stringify(availability));
+  renderRooms();
+}
+
+
+function switchLang() {
+  currentLang = currentLang === 'it' ? 'en' : 'it';
+  var btn = document.getElementById('lang-btn');
+  btn.textContent = currentLang === 'it' ? 'EN' : 'IT';
+  var it = currentLang === 'it';
+  document.getElementById('nav-appartamento').textContent = it ? 'Appartamento' : 'Apartment';
+  document.title = it ? 'Via Mazzini 20 — Affitto camere Torino' : 'Via Mazzini 20 — Rooms for rent Turin';
+  document.querySelector('.hero-tag').textContent = it ? 'Via Mazzini 20 · Torino · Centro' : 'Via Mazzini 20 · Turin · City Center';
+  document.querySelector('.hero h1').innerHTML = it ? 'Camere singole ad un passo<br>da <em>Piazza Bodoni</em>' : 'Single rooms steps away<br>from <em>Piazza Bodoni</em>';
+  document.querySelector('.hero p').textContent = it ? 'Appartamento completamente ristrutturato nel 2026, arredato nuovo, tutto incluso. Per studenti e lavoratori.' : 'Fully renovated apartment in 2026, brand new furniture, all-inclusive. For students and workers.';
+  document.querySelectorAll('.stat-label')[0].textContent = it ? 'Camere' : 'Rooms';
+  document.querySelectorAll('.stat-label')[1].textContent = it ? 'Ascensore' : 'Elevator';
+  document.querySelectorAll('.stat-label')[2].textContent = it ? 'Spese incluse' : 'Bills included';
+  document.querySelector('.sec-heading').textContent = it ? 'Ristrutturato, arredato nuovo, tutto incluso' : 'Renovated, brand new furniture, all-inclusive';
+  var secHeadings = document.querySelectorAll('.sec-heading');
+  if (secHeadings[1]) secHeadings[1].textContent = it ? 'Scegli la tua camera' : 'Choose your room';
+  renderRooms();
+}
+
+
+</script>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-ov" id="lightbox-ov" onclick="closeLightbox(event)">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <div class="lightbox-img-wrap">
+      <img id="lightbox-img" src="" alt="">
+    </div>
+    <div class="lightbox-nav">
+      <button class="lightbox-prev" onclick="lbPrev()" id="lb-prev">&#8249;</button>
+      <div class="lightbox-dots" id="lb-dots"></div>
+      <span class="lightbox-counter" id="lb-counter"></span>
+      <button class="lightbox-next" onclick="lbNext()" id="lb-next">&#8250;</button>
+    </div>
+  </div>
+  <button class="lightbox-close" onclick="closeLightboxBtn()">&#215;</button>
+</div>
+
+<!-- HIDDEN FILE INPUTS - created at page level for iOS compatibility -->
+<input type="file" id="room-file-1" accept="image/*" multiple style="display:none">
+<input type="file" id="room-file-2" accept="image/*" multiple style="display:none">
+<input type="file" id="room-file-3" accept="image/*" multiple style="display:none">
+<input type="file" id="room-file-4" accept="image/*" multiple style="display:none">
+<input type="file" id="common-file-input" accept="image/*" multiple style="display:none">
+</body>
+</html>
