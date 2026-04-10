@@ -19,8 +19,8 @@ body { font-family: 'DM Sans', -apple-system, sans-serif; background: #f5f4f0; c
 
 /* NAV */
 nav { background: var(--dark); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-.brand { font-family: 'Playfair Display', serif; color: #fff; font-size: 17px; font-weight: 600; letter-spacing: 0.3px; }
-.brand em { color: #4f9cf9; font-style: italic; }
+.brand { font-family: 'Playfair Display', serif; color: #fff; font-size: 15px; font-weight: 600; letter-spacing: 0.3px; display: flex; align-items: baseline; gap: 4px; }
+.brand em { color: #4f9cf9; font-style: italic; font-size: 26px; }
 .nav-link { color: rgba(255,255,255,0.65); font-size: 12px; text-decoration: none; cursor: pointer; border: none; background: none; }
 .nav-link:hover { color: #fff; }
 .nav-cta { background: #4f9cf9; color: #fff; border: none; padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; }
@@ -49,19 +49,14 @@ nav { background: var(--dark); padding: 14px 24px; display: flex; align-items: c
 .sec-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
 
 /* FEATURES */
-.features { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 32px; }
+.features { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 8px; }
 .feat { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-.feat-icon { font-size: 32px; margin-bottom: 10px; }
+.feat-icon { font-size: 44px; margin-bottom: 12px; }
 .feat h4 { font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
 .feat p { font-size: 11px; color: var(--muted); line-height: 1.5; }
 
 /* CALENDAR */
-.cal-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
-.cal-card h3 { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 14px; }
 .date-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.date-field label { font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px; }
-.date-field input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 9px; font-size: 13px; color: var(--dark); font-family: inherit; }
-.date-field input:focus { outline: none; border-color: var(--blue); }
 
 /* ROOMS */
 .rooms { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -197,6 +192,7 @@ footer strong { color: rgba(255,255,255,0.7); }
 .room-img { cursor: pointer; }
 
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -215,7 +211,7 @@ footer strong { color: rgba(255,255,255,0.7); }
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-tag">Via Mazzini 20 &middot; Torino &middot; Centro</div>
-    <h1>Camere singole a un passo<br>da <em>Piazza Bodoni</em></h1>
+    <h1>Camere singole ad un passo<br>da <em>Piazza Bodoni</em></h1>
     <p>Appartamento completamente ristrutturato nel 2026, arredato nuovo, tutto incluso. Per studenti e lavoratori.</p>
     <div class="hero-stats">
       <div><div class="stat-num">4</div><div class="stat-label">Camere</div></div>
@@ -248,21 +244,6 @@ footer strong { color: rgba(255,255,255,0.7); }
   <div class="sec-label">Disponibilit&agrave; camere</div>
   <div class="sec-heading">Scegli la tua camera</div>
   <div class="sec-sub">Camere disponibili da giugno 2026. Canoni all-inclusive — nessun costo aggiuntivo.</div>
-
-  <div class="cal-card">
-    <h3>📅 Seleziona il tuo periodo</h3>
-    <div class="date-row">
-      <div class="date-field">
-        <label>Data di ingresso</label>
-        <input type="date" id="date-in" min="2026-06-01" onchange="updateDates()">
-      </div>
-      <div class="date-field">
-        <label>Data di uscita</label>
-        <input type="date" id="date-out" min="2026-07-01" onchange="updateDates()">
-      </div>
-    </div>
-  </div>
-
   <div class="rooms" id="rooms-grid"></div>
 </div>
 
@@ -457,6 +438,10 @@ footer strong { color: rgba(255,255,255,0.7); }
 
 <script>
 var ADMIN_PWD = 'Leopold2807!';
+var EMAILJS_PK = 'J1wVECHBcKoK4zj5d';
+var EMAILJS_SID = 'service_rbrpcem';
+var EMAILJS_TID = 'template_0uw71ek';
+// emailjs initialized in window.onload
 var currentLang = 'it';
 var OWNER_EMAIL = 'Riccardoraballo@yahoo.it';
 
@@ -467,15 +452,16 @@ var ROOMS = [
   {id:4, name:'Camera 4', mq:'19.03', tags:['2 Balconi','Finestra','Parquet','Arredata'], price:680, desc:'La camera più grande con due balconi. La soluzione premium dell\'appartamento.'}
 ];
 
-var availability = (function(){ try { return JSON.parse(localStorage.getItem('m20_avail') || '{"1":true,"2":true,"3":true,"4":true}'); } catch(e) { return {"1":true,"2":true,"3":true,"4":true}; } })();
-var candidature = (function(){ try { return JSON.parse(localStorage.getItem('m20_cand') || '[]'); } catch(e) { return []; } })();
-var visite = (function(){ try { return JSON.parse(localStorage.getItem('m20_visite') || '[]'); } catch(e) { return []; } })();
-var roomPhotos = (function(){ try { return JSON.parse(localStorage.getItem('m20_photos') || '{"1":[],"2":[],"3":[],"4":[]}'); } catch(e) { return {"1":[],"2":[],"3":[],"4":[]}; } })();
-var commonPhotos = (function(){ try { return JSON.parse(localStorage.getItem('m20_common') || '[]'); } catch(e) { return []; } })();
+var availability = JSON.parse(localStorage.getItem('m20_avail') || '{"1":true,"2":true,"3":true,"4":true}');
+var candidature = JSON.parse(localStorage.getItem('m20_cand') || '[]');
+var visite = JSON.parse(localStorage.getItem('m20_visite') || '[]');
+var roomPhotos = JSON.parse(localStorage.getItem('m20_photos') || '{"1":[],"2":[],"3":[],"4":[]}');
+var commonPhotos = JSON.parse(localStorage.getItem('m20_common') || '[]');
 var selectedRoom = null;
 var docFile = null;
 
 window.onload = function() {
+  if (typeof emailjs !== 'undefined') emailjs.init(EMAILJS_PK);
   renderRooms();
   // Bind room file inputs
   for (var i = 0; i < ROOMS.length; i++) {
@@ -498,12 +484,9 @@ window.onload = function() {
 };
 
 function updateDates() {
-  var din = document.getElementById('date-in').value;
-  var dout = document.getElementById('date-out').value;
   if (din) {
     document.getElementById('f-din').value = din;
-    document.getElementById('date-out').min = din;
-  }
+    }
   if (dout) {
     document.getElementById('f-dout').value = dout;
   }
@@ -553,10 +536,6 @@ function openCand(id) {
     if (ROOMS[i].id === id) { selectedRoom = ROOMS[i]; break; }
   }
   document.getElementById('cand-room').textContent = selectedRoom.name;
-  var din = document.getElementById('date-in').value;
-  var dout = document.getElementById('date-out').value;
-  if (din) document.getElementById('f-din').value = din;
-  if (dout) document.getElementById('f-dout').value = dout;
   document.getElementById('cand-ov').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -608,7 +587,7 @@ function submitCand() {
     status: 'pending', ts: new Date().toLocaleString('it-IT')
   };
   candidature.push(c);
-  try { localStorage.setItem('m20_cand', JSON.stringify(candidature)); } catch(e) {}
+  localStorage.setItem('m20_cand', JSON.stringify(candidature));
   notify('[Mazzini 20] Candidatura: ' + selectedRoom.name,
     'Nome: ' + c.nome + '\nEmail: ' + c.email + '\nTel: ' + c.tel + '\nTipo: ' + c.tipo +
     '\nCamera: ' + c.camera + ' (€' + c.prezzo + '/mese)\nPeriodo: ' + c.din + ' -> ' + c.dout +
@@ -631,7 +610,7 @@ function submitVisit() {
     status: 'pending', ts: new Date().toLocaleString('it-IT')
   };
   visite.push(v);
-  try { localStorage.setItem('m20_visite', JSON.stringify(visite)); } catch(e) {}
+  localStorage.setItem('m20_visite', JSON.stringify(visite));
   notify('[Mazzini 20] Visita: ' + v.camera,
     'Nome: ' + v.nome + '\nEmail: ' + v.email + '\nTel: ' + v.tel +
     '\nCamera: ' + v.camera + '\nGiorno: ' + v.day + '\nOrario: ' + v.time);
@@ -640,7 +619,17 @@ function submitVisit() {
 }
 
 function notify(subject, body) {
-  console.log('EMAIL -> ' + OWNER_EMAIL + '\nSubject: ' + subject + '\n' + body);
+  var params = {
+    to_email: 'Riccardoraballo@yahoo.it',
+    subject: subject,
+    message: body
+  };
+  if (typeof emailjs !== 'undefined') {
+    emailjs.send(EMAILJS_SID, EMAILJS_TID, params).then(
+      function() { console.log('Email inviata con successo'); },
+      function(err) { console.log('Errore invio email:', err); }
+    );
+  }
 }
 
 function showSuccess(icon, title, msg) {
@@ -701,7 +690,7 @@ function uploadCommonPhoto(input) {
 }
 function removeCommonPhoto(i) {
   commonPhotos.splice(i, 1);
-  try { localStorage.setItem('m20_common', JSON.stringify(commonPhotos)); } catch(e) {}
+  localStorage.setItem('m20_common', JSON.stringify(commonPhotos));
   renderGallery();
 }
 
@@ -871,7 +860,7 @@ function uploadRoomPhoto(id, input) {
         loaded++;
         if (loaded === files.length) {
           try {
-            try { localStorage.setItem('m20_photos', JSON.stringify(roomPhotos)); } catch(e) {}
+            localStorage.setItem('m20_photos', JSON.stringify(roomPhotos));
           } catch(ex) {
             roomPhotos[id].splice(roomPhotos[id].length - loaded, loaded);
             alert('Spazio memoria esaurito. Rimuovi alcune foto e riprova.');
@@ -891,25 +880,25 @@ function uploadRoomPhoto(id, input) {
 function removeRoomPhoto(id, idx) {
   if (!roomPhotos[id]) return;
   roomPhotos[id].splice(idx, 1);
-  try { localStorage.setItem('m20_photos', JSON.stringify(roomPhotos)); } catch(e) {}
+  localStorage.setItem('m20_photos', JSON.stringify(roomPhotos));
   renderFotoAdmin();
   renderRooms();
 }
 
 function updateCand(i, status) {
   candidature[i].status = status;
-  try { localStorage.setItem('m20_cand', JSON.stringify(candidature)); } catch(e) {}
+  localStorage.setItem('m20_cand', JSON.stringify(candidature));
   renderAdmin();
 }
 function updateVisit(i, status) {
   visite[i].status = status;
-  try { localStorage.setItem('m20_visite', JSON.stringify(visite)); } catch(e) {}
+  localStorage.setItem('m20_visite', JSON.stringify(visite));
   renderAdmin();
 }
 function toggleAvail(id, el) {
   availability[id] = !availability[id];
   el.classList.toggle('on');
-  try { localStorage.setItem('m20_avail', JSON.stringify(availability)); } catch(e) {}
+  localStorage.setItem('m20_avail', JSON.stringify(availability));
   renderRooms();
 }
 
@@ -922,7 +911,7 @@ function switchLang() {
   document.getElementById('nav-appartamento').textContent = it ? 'Appartamento' : 'Apartment';
   document.title = it ? 'Via Mazzini 20 — Affitto camere Torino' : 'Via Mazzini 20 — Rooms for rent Turin';
   document.querySelector('.hero-tag').textContent = it ? 'Via Mazzini 20 · Torino · Centro' : 'Via Mazzini 20 · Turin · City Center';
-  document.querySelector('.hero h1').innerHTML = it ? 'Camere singole a un passo<br>da <em>Piazza Bodoni</em>' : 'Single rooms steps away<br>from <em>Piazza Bodoni</em>';
+  document.querySelector('.hero h1').innerHTML = it ? 'Camere singole ad un passo<br>da <em>Piazza Bodoni</em>' : 'Single rooms steps away<br>from <em>Piazza Bodoni</em>';
   document.querySelector('.hero p').textContent = it ? 'Appartamento completamente ristrutturato nel 2026, arredato nuovo, tutto incluso. Per studenti e lavoratori.' : 'Fully renovated apartment in 2026, brand new furniture, all-inclusive. For students and workers.';
   document.querySelectorAll('.stat-label')[0].textContent = it ? 'Camere' : 'Rooms';
   document.querySelectorAll('.stat-label')[1].textContent = it ? 'Ascensore' : 'Elevator';
@@ -930,9 +919,6 @@ function switchLang() {
   document.querySelector('.sec-heading').textContent = it ? 'Ristrutturato, arredato nuovo, tutto incluso' : 'Renovated, brand new furniture, all-inclusive';
   var secHeadings = document.querySelectorAll('.sec-heading');
   if (secHeadings[1]) secHeadings[1].textContent = it ? 'Scegli la tua camera' : 'Choose your room';
-  document.querySelector('.cal-card h3').textContent = it ? '📅 Seleziona il tuo periodo' : '📅 Select your period';
-  document.querySelectorAll('.date-field label')[0].textContent = it ? 'Data di ingresso' : 'Move-in date';
-  document.querySelectorAll('.date-field label')[1].textContent = it ? 'Data di uscita' : 'Move-out date';
   renderRooms();
 }
 
