@@ -19,8 +19,8 @@ body { font-family: 'DM Sans', -apple-system, sans-serif; background: #f5f4f0; c
 
 /* NAV */
 nav { background: var(--dark); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-.brand { font-family: 'Playfair Display', serif; color: #fff; font-size: 15px; font-weight: 600; letter-spacing: 0.3px; display: flex; align-items: baseline; gap: 4px; }
-.brand em { color: #4f9cf9; font-style: italic; font-size: 26px; }
+.brand { font-family: 'Playfair Display', serif; color: #fff; font-size: 17px; font-weight: 600; letter-spacing: 0.3px; }
+.brand em { color: #4f9cf9; font-style: italic; }
 .nav-link { color: rgba(255,255,255,0.65); font-size: 12px; text-decoration: none; cursor: pointer; border: none; background: none; }
 .nav-link:hover { color: #fff; }
 .nav-cta { background: #4f9cf9; color: #fff; border: none; padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; }
@@ -49,14 +49,19 @@ nav { background: var(--dark); padding: 14px 24px; display: flex; align-items: c
 .sec-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
 
 /* FEATURES */
-.features { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 8px; }
+.features { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 32px; }
 .feat { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-.feat-icon { font-size: 44px; margin-bottom: 12px; }
+.feat-icon { font-size: 32px; margin-bottom: 10px; }
 .feat h4 { font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 4px; }
 .feat p { font-size: 11px; color: var(--muted); line-height: 1.5; }
 
 /* CALENDAR */
+.cal-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+.cal-card h3 { font-size: 14px; font-weight: 700; color: var(--dark); margin-bottom: 14px; }
 .date-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.date-field label { font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px; }
+.date-field input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 9px; font-size: 13px; color: var(--dark); font-family: inherit; }
+.date-field input:focus { outline: none; border-color: var(--blue); }
 
 /* ROOMS */
 .rooms { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -210,7 +215,7 @@ footer strong { color: rgba(255,255,255,0.7); }
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-tag">Via Mazzini 20 &middot; Torino &middot; Centro</div>
-    <h1>Camere singole ad un passo<br>da <em>Piazza Bodoni</em></h1>
+    <h1>Camere singole a un passo<br>da <em>Piazza Bodoni</em></h1>
     <p>Appartamento completamente ristrutturato nel 2026, arredato nuovo, tutto incluso. Per studenti e lavoratori.</p>
     <div class="hero-stats">
       <div><div class="stat-num">4</div><div class="stat-label">Camere</div></div>
@@ -243,6 +248,21 @@ footer strong { color: rgba(255,255,255,0.7); }
   <div class="sec-label">Disponibilit&agrave; camere</div>
   <div class="sec-heading">Scegli la tua camera</div>
   <div class="sec-sub">Camere disponibili da giugno 2026. Canoni all-inclusive — nessun costo aggiuntivo.</div>
+
+  <div class="cal-card">
+    <h3>📅 Seleziona il tuo periodo</h3>
+    <div class="date-row">
+      <div class="date-field">
+        <label>Data di ingresso</label>
+        <input type="date" id="date-in" min="2026-06-01" onchange="updateDates()">
+      </div>
+      <div class="date-field">
+        <label>Data di uscita</label>
+        <input type="date" id="date-out" min="2026-07-01" onchange="updateDates()">
+      </div>
+    </div>
+  </div>
+
   <div class="rooms" id="rooms-grid"></div>
 </div>
 
@@ -478,9 +498,12 @@ window.onload = function() {
 };
 
 function updateDates() {
+  var din = document.getElementById('date-in').value;
+  var dout = document.getElementById('date-out').value;
   if (din) {
     document.getElementById('f-din').value = din;
-    }
+    document.getElementById('date-out').min = din;
+  }
   if (dout) {
     document.getElementById('f-dout').value = dout;
   }
@@ -530,6 +553,10 @@ function openCand(id) {
     if (ROOMS[i].id === id) { selectedRoom = ROOMS[i]; break; }
   }
   document.getElementById('cand-room').textContent = selectedRoom.name;
+  var din = document.getElementById('date-in').value;
+  var dout = document.getElementById('date-out').value;
+  if (din) document.getElementById('f-din').value = din;
+  if (dout) document.getElementById('f-dout').value = dout;
   document.getElementById('cand-ov').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -895,7 +922,7 @@ function switchLang() {
   document.getElementById('nav-appartamento').textContent = it ? 'Appartamento' : 'Apartment';
   document.title = it ? 'Via Mazzini 20 — Affitto camere Torino' : 'Via Mazzini 20 — Rooms for rent Turin';
   document.querySelector('.hero-tag').textContent = it ? 'Via Mazzini 20 · Torino · Centro' : 'Via Mazzini 20 · Turin · City Center';
-  document.querySelector('.hero h1').innerHTML = it ? 'Camere singole ad un passo<br>da <em>Piazza Bodoni</em>' : 'Single rooms steps away<br>from <em>Piazza Bodoni</em>';
+  document.querySelector('.hero h1').innerHTML = it ? 'Camere singole a un passo<br>da <em>Piazza Bodoni</em>' : 'Single rooms steps away<br>from <em>Piazza Bodoni</em>';
   document.querySelector('.hero p').textContent = it ? 'Appartamento completamente ristrutturato nel 2026, arredato nuovo, tutto incluso. Per studenti e lavoratori.' : 'Fully renovated apartment in 2026, brand new furniture, all-inclusive. For students and workers.';
   document.querySelectorAll('.stat-label')[0].textContent = it ? 'Camere' : 'Rooms';
   document.querySelectorAll('.stat-label')[1].textContent = it ? 'Ascensore' : 'Elevator';
@@ -903,6 +930,9 @@ function switchLang() {
   document.querySelector('.sec-heading').textContent = it ? 'Ristrutturato, arredato nuovo, tutto incluso' : 'Renovated, brand new furniture, all-inclusive';
   var secHeadings = document.querySelectorAll('.sec-heading');
   if (secHeadings[1]) secHeadings[1].textContent = it ? 'Scegli la tua camera' : 'Choose your room';
+  document.querySelector('.cal-card h3').textContent = it ? '📅 Seleziona il tuo periodo' : '📅 Select your period';
+  document.querySelectorAll('.date-field label')[0].textContent = it ? 'Data di ingresso' : 'Move-in date';
+  document.querySelectorAll('.date-field label')[1].textContent = it ? 'Data di uscita' : 'Move-out date';
   renderRooms();
 }
 
