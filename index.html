@@ -467,11 +467,11 @@ var ROOMS = [
   {id:4, name:'Camera 4', mq:'19.03', tags:['2 Balconi','Finestra','Parquet','Arredata'], price:680, desc:'La camera più grande con due balconi. La soluzione premium dell\'appartamento.'}
 ];
 
-var availability = JSON.parse(localStorage.getItem('m20_avail') || '{"1":true,"2":true,"3":true,"4":true}');
-var candidature = JSON.parse(localStorage.getItem('m20_cand') || '[]');
-var visite = JSON.parse(localStorage.getItem('m20_visite') || '[]');
-var roomPhotos = JSON.parse(localStorage.getItem('m20_photos') || '{"1":[],"2":[],"3":[],"4":[]}');
-var commonPhotos = JSON.parse(localStorage.getItem('m20_common') || '[]');
+var availability = (function(){ try { return JSON.parse(localStorage.getItem('m20_avail') || '{"1":true,"2":true,"3":true,"4":true}'); } catch(e) { return {"1":true,"2":true,"3":true,"4":true}; } })();
+var candidature = (function(){ try { return JSON.parse(localStorage.getItem('m20_cand') || '[]'); } catch(e) { return []; } })();
+var visite = (function(){ try { return JSON.parse(localStorage.getItem('m20_visite') || '[]'); } catch(e) { return []; } })();
+var roomPhotos = (function(){ try { return JSON.parse(localStorage.getItem('m20_photos') || '{"1":[],"2":[],"3":[],"4":[]}'); } catch(e) { return {"1":[],"2":[],"3":[],"4":[]}; } })();
+var commonPhotos = (function(){ try { return JSON.parse(localStorage.getItem('m20_common') || '[]'); } catch(e) { return []; } })();
 var selectedRoom = null;
 var docFile = null;
 
@@ -608,7 +608,7 @@ function submitCand() {
     status: 'pending', ts: new Date().toLocaleString('it-IT')
   };
   candidature.push(c);
-  localStorage.setItem('m20_cand', JSON.stringify(candidature));
+  try { localStorage.setItem('m20_cand', JSON.stringify(candidature)); } catch(e) {}
   notify('[Mazzini 20] Candidatura: ' + selectedRoom.name,
     'Nome: ' + c.nome + '\nEmail: ' + c.email + '\nTel: ' + c.tel + '\nTipo: ' + c.tipo +
     '\nCamera: ' + c.camera + ' (€' + c.prezzo + '/mese)\nPeriodo: ' + c.din + ' -> ' + c.dout +
@@ -631,7 +631,7 @@ function submitVisit() {
     status: 'pending', ts: new Date().toLocaleString('it-IT')
   };
   visite.push(v);
-  localStorage.setItem('m20_visite', JSON.stringify(visite));
+  try { localStorage.setItem('m20_visite', JSON.stringify(visite)); } catch(e) {}
   notify('[Mazzini 20] Visita: ' + v.camera,
     'Nome: ' + v.nome + '\nEmail: ' + v.email + '\nTel: ' + v.tel +
     '\nCamera: ' + v.camera + '\nGiorno: ' + v.day + '\nOrario: ' + v.time);
@@ -701,7 +701,7 @@ function uploadCommonPhoto(input) {
 }
 function removeCommonPhoto(i) {
   commonPhotos.splice(i, 1);
-  localStorage.setItem('m20_common', JSON.stringify(commonPhotos));
+  try { localStorage.setItem('m20_common', JSON.stringify(commonPhotos)); } catch(e) {}
   renderGallery();
 }
 
@@ -871,7 +871,7 @@ function uploadRoomPhoto(id, input) {
         loaded++;
         if (loaded === files.length) {
           try {
-            localStorage.setItem('m20_photos', JSON.stringify(roomPhotos));
+            try { localStorage.setItem('m20_photos', JSON.stringify(roomPhotos)); } catch(e) {}
           } catch(ex) {
             roomPhotos[id].splice(roomPhotos[id].length - loaded, loaded);
             alert('Spazio memoria esaurito. Rimuovi alcune foto e riprova.');
@@ -891,25 +891,25 @@ function uploadRoomPhoto(id, input) {
 function removeRoomPhoto(id, idx) {
   if (!roomPhotos[id]) return;
   roomPhotos[id].splice(idx, 1);
-  localStorage.setItem('m20_photos', JSON.stringify(roomPhotos));
+  try { localStorage.setItem('m20_photos', JSON.stringify(roomPhotos)); } catch(e) {}
   renderFotoAdmin();
   renderRooms();
 }
 
 function updateCand(i, status) {
   candidature[i].status = status;
-  localStorage.setItem('m20_cand', JSON.stringify(candidature));
+  try { localStorage.setItem('m20_cand', JSON.stringify(candidature)); } catch(e) {}
   renderAdmin();
 }
 function updateVisit(i, status) {
   visite[i].status = status;
-  localStorage.setItem('m20_visite', JSON.stringify(visite));
+  try { localStorage.setItem('m20_visite', JSON.stringify(visite)); } catch(e) {}
   renderAdmin();
 }
 function toggleAvail(id, el) {
   availability[id] = !availability[id];
   el.classList.toggle('on');
-  localStorage.setItem('m20_avail', JSON.stringify(availability));
+  try { localStorage.setItem('m20_avail', JSON.stringify(availability)); } catch(e) {}
   renderRooms();
 }
 
