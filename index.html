@@ -588,10 +588,21 @@ function submitCand() {
   };
   candidature.push(c);
   localStorage.setItem('m20_cand', JSON.stringify(candidature));
-  notify('[Mazzini 20] Candidatura: ' + selectedRoom.name,
-    'Nome: ' + c.nome + '\nEmail: ' + c.email + '\nTel: ' + c.tel + '\nTipo: ' + c.tipo +
-    '\nCamera: ' + c.camera + ' (€' + c.prezzo + '/mese)\nPeriodo: ' + c.din + ' -> ' + c.dout +
-    '\nDocumento: ' + c.doc + '\nPresentazione: ' + c.bio);
+  notifyDetailed({
+    subject: '[Mazzini 20] Nuova candidatura — ' + selectedRoom.name,
+    nome: c.nome,
+    email: c.email,
+    tel: c.tel,
+    tipo: c.tipo,
+    univ_azienda: c.univ || c.azienda || '—',
+    camera: c.camera,
+    prezzo: c.prezzo,
+    datain: c.din,
+    dataout: c.dout,
+    bio: c.bio,
+    documento: c.doc,
+    timestamp: c.ts
+  });
   closeCand();
   showSuccess('✅', 'Candidatura inviata!', 'Abbiamo ricevuto la tua candidatura. Ti risponderemo entro 24 ore lavorative.');
 }
@@ -611,18 +622,45 @@ function submitVisit() {
   };
   visite.push(v);
   localStorage.setItem('m20_visite', JSON.stringify(visite));
-  notify('[Mazzini 20] Visita: ' + v.camera,
-    'Nome: ' + v.nome + '\nEmail: ' + v.email + '\nTel: ' + v.tel +
-    '\nCamera: ' + v.camera + '\nGiorno: ' + v.day + '\nOrario: ' + v.time);
+  notifyDetailed({
+    subject: '[Mazzini 20] Richiesta visita — ' + v.camera,
+    nome: v.nome,
+    email: v.email,
+    tel: v.tel,
+    tipo: 'Richiesta visita',
+    univ_azienda: '—',
+    camera: v.camera,
+    prezzo: '—',
+    datain: v.day + ' ' + v.time,
+    dataout: '—',
+    bio: v.note || '—',
+    documento: '—',
+    timestamp: v.ts
+  });
   closeVisit();
   showSuccess('📅', 'Visita richiesta!', 'Ti contatteremo entro 24 ore per confermare data e orario.');
 }
 
 function notify(subject, body) {
+  notifyDetailed({ subject: subject, bio: body, nome:'', email:'', tel:'', tipo:'', univ_azienda:'', camera:'', prezzo:'', datain:'', dataout:'', documento:'', timestamp:'' });
+}
+
+function notifyDetailed(p) {
   var params = {
     to_email: 'Riccardoraballo@yahoo.it',
-    subject: subject,
-    message: body
+    subject: p.subject,
+    nome: p.nome,
+    email: p.email,
+    tel: p.tel,
+    tipo: p.tipo,
+    univ_azienda: p.univ_azienda,
+    camera: p.camera,
+    prezzo: p.prezzo,
+    datain: p.datain,
+    dataout: p.dataout,
+    bio: p.bio,
+    documento: p.documento,
+    timestamp: p.timestamp
   };
   if (typeof emailjs !== 'undefined') {
     emailjs.send(EMAILJS_SID, EMAILJS_TID, params).then(
