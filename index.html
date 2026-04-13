@@ -191,8 +191,76 @@ footer strong { color: rgba(255,255,255,0.7); }
 .lb-dot.active { background: #fff; }
 .room-img { cursor: pointer; }
 
+
+/* LIGHTBOX */
+.lb-ov { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 600; }
+.lb-ov.open { display: flex; align-items: center; justify-content: center; }
+.lb-inner { position: relative; display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 20px; max-width: 95vw; }
+.lb-inner img { max-width: 88vw; max-height: 75vh; border-radius: 10px; object-fit: contain; display: block; }
+.lb-close { position: fixed; top: 16px; right: 16px; background: rgba(255,255,255,0.15); border: none; color: #fff; font-size: 24px; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; }
+.lb-prev, .lb-next { background: rgba(255,255,255,0.15); border: none; color: #fff; font-size: 22px; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; }
+.lb-counter { color: rgba(255,255,255,0.7); font-size: 13px; min-width: 40px; text-align: center; }
+.lb-dots { display: flex; gap: 6px; }
+.lb-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; border: none; }
+.lb-dot.on { background: #fff; }
+.room-img.clickable { cursor: zoom-in; }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+// LIGHTBOX
+var _lbPhotos = [];
+var _lbIdx = 0;
+
+function lbOpen(photosArr, idx) {
+  if (!photosArr || photosArr.length === 0) return;
+  var valid = [];
+  var tested = 0;
+  var total = photosArr.length;
+  function tryShow() {
+    if (valid.length === 0) return;
+    _lbPhotos = valid;
+    _lbIdx = 0;
+    lbRender();
+    document.getElementById('lb-ov').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  for (var i = 0; i < total; i++) {
+    (function(src) {
+      var img = new Image();
+      img.onload = function() { valid.push(src); tested++; if (tested === total) tryShow(); };
+      img.onerror = function() { tested++; if (tested === total) tryShow(); };
+      img.src = src;
+    })(photosArr[i]);
+  }
+}
+
+function lbClose() {
+  document.getElementById('lb-ov').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lbStep(dir) {
+  _lbIdx = (_lbIdx + dir + _lbPhotos.length) % _lbPhotos.length;
+  lbRender();
+}
+function lbRender() {
+  document.getElementById('lb-img').src = _lbPhotos[_lbIdx];
+  var showNav = _lbPhotos.length > 1;
+  document.getElementById('lb-prev').style.display = showNav ? '' : 'none';
+  document.getElementById('lb-next').style.display = showNav ? '' : 'none';
+  document.getElementById('lb-counter').textContent = showNav ? (_lbIdx+1) + '/' + _lbPhotos.length : '';
+  var dots = '';
+  for (var i = 0; i < _lbPhotos.length; i++) {
+    dots += '<button class="lb-dot' + (i===_lbIdx?' on':'') + '" onclick="lbGo('+i+')"></button>';
+  }
+  document.getElementById('lb-dots').innerHTML = dots;
+}
+function lbGo(i) { _lbIdx = i; lbRender(); }
+
+document.addEventListener('DOMContentLoaded', function() {
+  var ov = document.getElementById('lb-ov');
+  if (ov) ov.addEventListener('click', function(e) { if (e.target === this) lbClose(); });
+});
+
+</script>
 </head>
 <body>
 
@@ -403,8 +471,7 @@ footer strong { color: rgba(255,255,255,0.7); }
       <button class="atab active" onclick="showTab('candidature',this)">Candidature</button>
       <button class="atab" onclick="showTab('visite',this)">Visite</button>
       <button class="atab" onclick="showTab('disponibilita',this)">Disponibilit&agrave;</button>
-      <button class="atab" onclick="showTab('foto',this)">Foto camere</button>
-      <button class="atab" onclick="showTab('appartamento',this)">Foto appartamento</button>
+
     </div>
     <div id="t-candidature"><div id="cand-list"></div></div>
     <div id="t-visite" style="display:none"><div id="visit-list"></div></div>
@@ -412,13 +479,6 @@ footer strong { color: rgba(255,255,255,0.7); }
       <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Attiva o disattiva la disponibilit&agrave; in tempo reale.</p>
       <div id="avail-list"></div>
     </div>
-    <div id="t-foto" style="display:none">
-      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Carica le foto di ogni camera. Appaiono subito nel portale.</p>
-      <div id="foto-list"></div>
-    </div>
-    <div id="t-appartamento" style="display:none">
-      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Carica le foto delle zone comuni (cucina, bagno, corridoio). Visibili cliccando "Appartamento" nel menu.</p>
-      <div id="common-foto-list"></div>
       <button onclick="triggerCommonUpload()" style="display:inline-flex;align-items:center;gap:8px;padding:9px 16px;background:#e8f0fe;color:#1a56db;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;margin-top:12px;border:none;font-family:inherit">
         📷 Aggiungi foto zone comuni
       </button>
@@ -455,27 +515,22 @@ var ROOMS = [
 var availability = JSON.parse(localStorage.getItem('m20_avail') || '{"1":true,"2":true,"3":true,"4":true}');
 var candidature = JSON.parse(localStorage.getItem('m20_cand') || '[]');
 var visite = JSON.parse(localStorage.getItem('m20_visite') || '[]');
-var roomPhotos = JSON.parse(localStorage.getItem('m20_photos') || '{"1":[],"2":[],"3":[],"4":[]}');
-var commonPhotos = JSON.parse(localStorage.getItem('m20_common') || '[]');
+var roomPhotos = {"1":["cam1_1.jpg", "cam1_2.jpg", "cam1_3.jpg", "cam1_4.jpg", "cam1_5.jpg", "cam1_6.jpg", "cam1_7.jpg", "cam1_8.jpg", "cam1_9.jpg", "cam1_10.jpg", "cam1_11.jpg", "cam1_12.jpg", "cam1_13.jpg", "cam1_14.jpg", "cam1_15.jpg", "cam1_16.jpg", "cam1_17.jpg", "cam1_18.jpg", "cam1_19.jpg", "cam1_20.jpg"],"2":["cam2_1.jpg", "cam2_2.jpg", "cam2_3.jpg", "cam2_4.jpg", "cam2_5.jpg", "cam2_6.jpg", "cam2_7.jpg", "cam2_8.jpg", "cam2_9.jpg", "cam2_10.jpg", "cam2_11.jpg", "cam2_12.jpg", "cam2_13.jpg", "cam2_14.jpg", "cam2_15.jpg", "cam2_16.jpg", "cam2_17.jpg", "cam2_18.jpg", "cam2_19.jpg", "cam2_20.jpg"],"3":["cam3_1.jpg", "cam3_2.jpg", "cam3_3.jpg", "cam3_4.jpg", "cam3_5.jpg", "cam3_6.jpg", "cam3_7.jpg", "cam3_8.jpg", "cam3_9.jpg", "cam3_10.jpg", "cam3_11.jpg", "cam3_12.jpg", "cam3_13.jpg", "cam3_14.jpg", "cam3_15.jpg", "cam3_16.jpg", "cam3_17.jpg", "cam3_18.jpg", "cam3_19.jpg", "cam3_20.jpg"],"4":["cam4_1.jpg", "cam4_2.jpg", "cam4_3.jpg", "cam4_4.jpg", "cam4_5.jpg", "cam4_6.jpg", "cam4_7.jpg", "cam4_8.jpg", "cam4_9.jpg", "cam4_10.jpg", "cam4_11.jpg", "cam4_12.jpg", "cam4_13.jpg", "cam4_14.jpg", "cam4_15.jpg", "cam4_16.jpg", "cam4_17.jpg", "cam4_18.jpg", "cam4_19.jpg", "cam4_20.jpg"]};
+var appPhotos = ["app1.jpg", "app2.jpg", "app3.jpg", "app4.jpg", "app5.jpg", "app6.jpg", "app7.jpg", "app8.jpg", "app9.jpg", "app10.jpg", "app11.jpg", "app12.jpg", "app13.jpg", "app14.jpg", "app15.jpg", "app16.jpg", "app17.jpg", "app18.jpg", "app19.jpg", "app20.jpg"];
+var commonPhotos = appPhotos;
 var selectedRoom = null;
 var docFile = null;
 
 window.onload = function() {
   if (typeof emailjs !== 'undefined') emailjs.init(EMAILJS_PK);
   renderRooms();
-  // Bind room file inputs
-  for (var i = 0; i < ROOMS.length; i++) {
     (function(rid) {
       var inp = document.getElementById('room-file-' + rid);
       if (inp) {
         inp.addEventListener('change', function() {
-          if (this.files && this.files.length > 0) uploadRoomPhoto(rid, this);
         });
-      }
     })(ROOMS[i].id);
   }
-  // Bind common photos input
-  var cinp = document.getElementById('common-file-input');
   if (cinp) {
     cinp.addEventListener('change', function() {
       if (this.files && this.files.length > 0) uploadCommonPhoto(this);
@@ -501,7 +556,7 @@ function renderRooms() {
     var rPhotos = roomPhotos[r.id] || [];
 var hasPhotos = rPhotos.length > 0;
 var photoHtml = hasPhotos
-      ? '<img src="' + rPhotos[0] + '" alt="' + r.name + '">'
+      ? '<img src="' + rPhotos[0] + '" alt="' + r.name + '" onerror="this.parentElement.innerHTML='<div class=\"room-placeholder\"><div>📷</div><p>Foto in arrivo</p></div>'">'
       : '<div class="room-placeholder"><div>📷</div><p>Foto in arrivo</p></div>';
 var photoCount = hasPhotos && rPhotos.length > 1 ? '<div style="position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,0.55);color:#fff;font-size:10px;font-weight:600;padding:3px 8px;border-radius:12px;">📷 ' + rPhotos.length + '</div>' : '';
 var photoClick = hasPhotos ? ' onclick="openLightbox(' + r.id + ')"' : '';
@@ -698,40 +753,6 @@ function renderGallery() {
   grid.innerHTML = html;
 }
 
-function uploadCommonPhoto(input) {
-  var files = Array.from(input.files);
-  if (!files || files.length === 0) return;
-  var count = 0;
-  var total = files.length;
-  for (var i = 0; i < total; i++) {
-    (function(file) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        if (e.target && e.target.result) {
-          commonPhotos.push(e.target.result);
-        }
-        count++;
-        if (count === total) {
-          try { localStorage.setItem('m20_common', JSON.stringify(commonPhotos)); } catch(ex) {}
-          renderGallery();
-          var tab = document.getElementById('t-appartamento');
-          if (tab && tab.style.display !== 'none') renderCommonFotoAdmin();
-        }
-      };
-      reader.onerror = function() {
-        count++;
-        if (count === total) { renderGallery(); }
-      };
-      reader.readAsDataURL(file);
-    })(files[i]);
-  }
-}
-function removeCommonPhoto(i) {
-  commonPhotos.splice(i, 1);
-  localStorage.setItem('m20_common', JSON.stringify(commonPhotos));
-  renderGallery();
-}
-
 function openAdminLogin() {
   document.getElementById('admin-pwd').value = '';
   document.getElementById('login-err').style.display = 'none';
@@ -755,14 +776,12 @@ function checkLogin() {
 function closeAdmin() { document.getElementById('admin-ov').classList.remove('open'); document.body.style.overflow = ''; }
 
 function showTab(tab, btn) {
-  var tabs = ['candidature','visite','disponibilita','foto','appartamento'];
+  var tabs = ['candidature','visite','disponibilita'];
   document.querySelectorAll('.atab').forEach(function(t) { t.classList.remove('active'); });
   btn.classList.add('active');
   for (var i = 0; i < tabs.length; i++) {
     document.getElementById('t-' + tabs[i]).style.display = tabs[i] === tab ? 'block' : 'none';
   }
-  if (tab === 'foto') renderFotoAdmin();
-  if (tab === 'appartamento') renderCommonFotoAdmin();
 }
 
 function renderAdmin() {
@@ -825,104 +844,6 @@ function renderAdmin() {
 }
 
 
-function renderCommonFotoAdmin() {
-  var fl = document.getElementById('common-foto-list');
-  if (!fl) return;
-  if (commonPhotos.length === 0) {
-    fl.innerHTML = '<div style="text-align:center;padding:16px;color:#aaa;font-size:12px;background:#fafaf8;border-radius:8px;margin-bottom:10px">Nessuna foto caricata</div>';
-    return;
-  }
-  var html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">';
-  for (var i = 0; i < commonPhotos.length; i++) {
-    html += '<div style="position:relative;border-radius:6px;overflow:hidden;height:80px">';
-    html += '<img src="' + commonPhotos[i] + '" style="width:100%;height:100%;object-fit:cover">';
-    html += '<button onclick="removeCommonPhoto(' + i + ');renderCommonFotoAdmin();" style="position:absolute;top:3px;right:3px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;line-height:1">×</button>';
-    html += '</div>';
-  }
-  html += '</div><div style="font-size:10px;color:#aaa">' + commonPhotos.length + ' foto caricate</div>';
-  fl.innerHTML = html;
-}
-
-function renderFotoAdmin() {
-  var fl = document.getElementById('foto-list');
-  var html = '';
-  for (var i = 0; i < ROOMS.length; i++) {
-    var r = ROOMS[i];
-    var photos = roomPhotos[r.id] || [];
-    html += '<div class="foto-item">';
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">';
-    html += '<div><div style="font-size:13px;font-weight:600;color:#1a1a2e">' + r.name + '</div>';
-    html += '<div style="font-size:11px;color:#777">' + r.mq + ' mq · €' + r.price + '/mese · ' + photos.length + ' foto</div></div>';
-    html += '<button class="foto-upload-label" style="flex:none;border:none;font-family:inherit;cursor:pointer;" onclick="triggerRoomUpload(' + r.id + ')">📷 Aggiungi foto</button>';
-    html += '</div>';
-    if (photos.length > 0) {
-      html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px">';
-      for (var j = 0; j < photos.length; j++) {
-        html += '<div style="position:relative;border-radius:6px;overflow:hidden;height:70px">';
-        html += '<img src="' + photos[j] + '" style="width:100%;height:100%;object-fit:cover">';
-        html += '<button onclick="removeRoomPhoto(' + r.id + ',' + j + ')" style="position:absolute;top:3px;right:3px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;line-height:1">×</button>';
-        if (j === 0) html += '<div style="position:absolute;bottom:3px;left:3px;background:rgba(26,86,219,0.8);color:#fff;font-size:8px;font-weight:600;padding:1px 5px;border-radius:3px">COVER</div>';
-        html += '</div>';
-      }
-      html += '</div>';
-      html += '<div style="font-size:10px;color:#aaa">La prima foto è usata come cover nella scheda camera</div>';
-    } else {
-      html += '<div style="text-align:center;padding:16px;color:#aaa;font-size:12px;background:#fafaf8;border-radius:8px">Nessuna foto caricata</div>';
-    }
-    html += '</div>';
-  }
-  fl.innerHTML = html;
-
-}
-
-function triggerRoomUpload(id) {
-  var inp = document.getElementById('room-file-' + id);
-  if (inp) { inp.value = ''; inp.click(); }
-}
-
-function triggerCommonUpload() {
-  var inp = document.getElementById('common-file-input');
-  if (inp) { inp.value = ''; inp.click(); }
-}
-
-function uploadRoomPhoto(id, input) {
-  var files = Array.from(input.files);
-  if (!roomPhotos[id]) roomPhotos[id] = [];
-  var loaded = 0;
-  if (files.length === 0) return;
-  for (var i = 0; i < files.length; i++) {
-    (function(file) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        roomPhotos[id].push(e.target.result);
-        loaded++;
-        if (loaded === files.length) {
-          try {
-            localStorage.setItem('m20_photos', JSON.stringify(roomPhotos));
-          } catch(ex) {
-            roomPhotos[id].splice(roomPhotos[id].length - loaded, loaded);
-            alert('Spazio memoria esaurito. Rimuovi alcune foto e riprova.');
-          }
-          renderFotoAdmin();
-          renderRooms();
-        }
-      };
-      reader.onerror = function() {
-        loaded++;
-        if (loaded === files.length) { renderFotoAdmin(); renderRooms(); }
-      };
-      reader.readAsDataURL(file);
-    })(files[i]);
-  }
-}
-function removeRoomPhoto(id, idx) {
-  if (!roomPhotos[id]) return;
-  roomPhotos[id].splice(idx, 1);
-  localStorage.setItem('m20_photos', JSON.stringify(roomPhotos));
-  renderFotoAdmin();
-  renderRooms();
-}
-
 function updateCand(i, status) {
   candidature[i].status = status;
   localStorage.setItem('m20_cand', JSON.stringify(candidature));
@@ -961,6 +882,61 @@ function switchLang() {
 }
 
 
+
+// LIGHTBOX
+var _lbPhotos = [];
+var _lbIdx = 0;
+
+function lbOpen(photosArr, idx) {
+  if (!photosArr || photosArr.length === 0) return;
+  var valid = [];
+  var tested = 0;
+  var total = photosArr.length;
+  function tryShow() {
+    if (valid.length === 0) return;
+    _lbPhotos = valid;
+    _lbIdx = 0;
+    lbRender();
+    document.getElementById('lb-ov').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  for (var i = 0; i < total; i++) {
+    (function(src) {
+      var img = new Image();
+      img.onload = function() { valid.push(src); tested++; if (tested === total) tryShow(); };
+      img.onerror = function() { tested++; if (tested === total) tryShow(); };
+      img.src = src;
+    })(photosArr[i]);
+  }
+}
+
+function lbClose() {
+  document.getElementById('lb-ov').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lbStep(dir) {
+  _lbIdx = (_lbIdx + dir + _lbPhotos.length) % _lbPhotos.length;
+  lbRender();
+}
+function lbRender() {
+  document.getElementById('lb-img').src = _lbPhotos[_lbIdx];
+  var showNav = _lbPhotos.length > 1;
+  document.getElementById('lb-prev').style.display = showNav ? '' : 'none';
+  document.getElementById('lb-next').style.display = showNav ? '' : 'none';
+  document.getElementById('lb-counter').textContent = showNav ? (_lbIdx+1) + '/' + _lbPhotos.length : '';
+  var dots = '';
+  for (var i = 0; i < _lbPhotos.length; i++) {
+    dots += '<button class="lb-dot' + (i===_lbIdx?' on':'') + '" onclick="lbGo('+i+')"></button>';
+  }
+  document.getElementById('lb-dots').innerHTML = dots;
+}
+function lbGo(i) { _lbIdx = i; lbRender(); }
+
+document.addEventListener('DOMContentLoaded', function() {
+  var ov = document.getElementById('lb-ov');
+  if (ov) ov.addEventListener('click', function(e) { if (e.target === this) lbClose(); });
+});
+
 </script>
 
 <!-- LIGHTBOX -->
@@ -979,11 +955,19 @@ function switchLang() {
   <button class="lightbox-close" onclick="closeLightboxBtn()">&#215;</button>
 </div>
 
-<!-- HIDDEN FILE INPUTS - created at page level for iOS compatibility -->
-<input type="file" id="room-file-1" accept="image/*" multiple style="display:none">
-<input type="file" id="room-file-2" accept="image/*" multiple style="display:none">
-<input type="file" id="room-file-3" accept="image/*" multiple style="display:none">
-<input type="file" id="room-file-4" accept="image/*" multiple style="display:none">
-<input type="file" id="common-file-input" accept="image/*" multiple style="display:none">
+
+<!-- LIGHTBOX -->
+<div class="lb-ov" id="lb-ov">
+  <div class="lb-inner">
+    <img id="lb-img" src="" alt="">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button class="lb-prev" id="lb-prev" onclick="lbStep(-1)">&#8249;</button>
+      <div class="lb-dots" id="lb-dots"></div>
+      <span class="lb-counter" id="lb-counter"></span>
+      <button class="lb-next" id="lb-next" onclick="lbStep(1)">&#8250;</button>
+    </div>
+  </div>
+  <button class="lb-close" onclick="lbClose()">&#215;</button>
+</div>
 </body>
 </html>
