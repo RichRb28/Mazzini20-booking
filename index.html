@@ -76,9 +76,6 @@ nav{background:var(--dark);padding:14px 24px;display:flex;align-items:center;jus
 .fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{outline:none;border-color:var(--blue)}
 .fgroup textarea{resize:none}
 .info-box{background:#e8f0fe;border:1px solid #c0d4fb;border-radius:9px;padding:10px;font-size:11px;color:var(--blue);margin-bottom:14px;line-height:1.6}
-.upload-box{border:2px dashed #ddd;border-radius:9px;padding:16px;text-align:center;cursor:pointer;background:#fafaf8}
-.upload-box:hover{border-color:var(--blue);background:var(--light)}
-.upload-preview{font-size:11px;color:#065f46;margin-top:6px;font-weight:500}
 .btn-row{display:flex;gap:10px;margin-top:20px}
 .btn-cancel{padding:10px 16px;border:1px solid var(--border);background:#fff;color:#666;border-radius:9px;cursor:pointer;font-size:12px;font-family:inherit}
 .btn-submit{flex:1;padding:10px;background:var(--blue);color:#fff;border:none;border-radius:9px;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit}
@@ -249,15 +246,7 @@ footer strong{color:rgba(255,255,255,0.7)}
     </div>
     <div class="sec-title">Presentati</div>
     <div class="fgroup"><label>Breve presentazione *</label><textarea id="f-bio" rows="3" placeholder="Chi sei e perch&eacute; cerchi alloggio a Torino..."></textarea></div>
-    <div class="sec-title">Documento d&rsquo;identit&agrave;</div>
-    <div class="upload-box" onclick="document.getElementById('doc-file').click()">
-      <div style="font-size:24px">📎</div>
-      <div style="font-size:12px;font-weight:600;color:#555;margin:4px 0">Carica documento d&rsquo;identit&agrave;</div>
-      <div style="font-size:11px;color:#999">Carta d&rsquo;identit&agrave; o passaporto (JPG, PNG, PDF &mdash; max 5MB)</div>
-      <div class="upload-preview" id="doc-preview"></div>
-    </div>
-    <input type="file" id="doc-file" accept=".jpg,.jpeg,.png,.pdf" style="display:none" onchange="handleDoc(this)">
-    <div class="btn-row">
+<div class="btn-row">
       <button class="btn-cancel" onclick="closeCand()">Annulla</button>
       <button class="btn-submit" onclick="submitCand()">Invia candidatura</button>
     </div>
@@ -368,7 +357,6 @@ var availability = (function(){try{return JSON.parse(localStorage.getItem('m20_a
 var candidature = (function(){try{return JSON.parse(localStorage.getItem('m20_cand')||'[]');}catch(e){return[];}})();
 var visite = (function(){try{return JSON.parse(localStorage.getItem('m20_visite')||'[]');}catch(e){return[];}})();
 var selectedRoom = null;
-var docFile = null;
 
 window.onload = function() {
   if (typeof emailjs !== 'undefined') emailjs.init(EMAILJS_PK);
@@ -430,10 +418,6 @@ function toggleTipo(){
   document.getElementById('l-fields').style.display=t==='lavoratore'?'block':'none';
 }
 
-function handleDoc(input){
-  var file=input.files[0];
-  if(!file)return;
-  if(file.size>5*1024*1024){alert('File troppo grande. Max 5MB.');return;}
   docFile=file;
   document.getElementById('doc-preview').textContent='✓ '+file.name;
 }
@@ -451,7 +435,7 @@ function submitCand(){
   var c={id:Date.now(),nome:nome+' '+cognome,email:email,tel:tel,tipo:tipo,camera:selectedRoom.name,prezzo:selectedRoom.price,din:din,dout:dout,bio:bio,doc:docFile?docFile.name:'Non caricato',univ:document.getElementById('f-univ').value,azienda:document.getElementById('f-azienda').value,status:'pending',ts:new Date().toLocaleString('it-IT')};
   candidature.push(c);
   try{localStorage.setItem('m20_cand',JSON.stringify(candidature));}catch(e){}
-  sendEmail('[Mazzini 20] Nuova candidatura — '+selectedRoom.name,c.nome,c.email,c.tel,c.tipo,c.univ||c.azienda||'—',c.camera,c.prezzo,c.din,c.dout,c.bio,c.doc,c.ts);
+  sendEmail('[Mazzini 20] Nuova candidatura — '+selectedRoom.name,c.nome,c.email,c.tel,c.tipo,c.univ||c.azienda||'—',c.camera,c.prezzo,c.din,c.dout,c.bio,'—',c.ts);
   closeCand();
   showSuccess('✅','Candidatura inviata!','Abbiamo ricevuto la tua candidatura. Ti risponderemo entro 24 ore lavorative.');
 }
@@ -523,7 +507,7 @@ function renderAdmin(){
       html+='📅 '+c.din+' → '+c.dout+'<br>';
       html+='👤 '+c.tipo+(c.univ?' · '+c.univ:'')+(c.azienda?' · '+c.azienda:'')+'<br>';
       html+='📧 '+c.email+' · 📞 '+c.tel+'<br>';
-      html+='📎 '+c.doc+'<br>💬 '+c.bio+'<br>🕐 '+c.ts+'</div>';
+      html+='💬 '+c.bio+'<br>🕐 '+c.ts+'</div>';
       html+='<div class="cand-acts">';
       html+='<button class="act-approve" data-idx="'+i+'" data-action="approve">✓ Approva</button>';
       html+='<button class="act-reject" data-idx="'+i+'" data-action="reject">✗ Rifiuta</button>';
