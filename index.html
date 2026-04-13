@@ -386,10 +386,11 @@ function renderRooms() {
     var name = it ? r.name : r.nameEN;
     var desc = it ? r.desc : r.descEN;
     var tags = it ? r.tags : r.tagsEN;
+    var placeholder = '<div class="room-placeholder"><div>📷</div><p>' + (it?'Foto in arrivo':'Photos coming soon') + '</p></div>';
     var photoHtml = photos.length > 0
-      ? '<img src="' + photos[0] + '" onerror="this.parentElement.innerHTML='<div class=\"room-placeholder\"><div>📷</div><p>' + (it?'Foto in arrivo':'Photos coming soon') + '</p></div>'" alt="' + name + '">'
-      : '<div class="room-placeholder"><div>📷</div><p>' + (it?'Foto in arrivo':'Photos coming soon') + '</p></div>';
-    var photoClick = photos.length > 0 ? ' onclick="lbOpen(roomPhotos[''+r.id+''],0)" style="cursor:zoom-in"' : '';
+      ? '<img src="' + photos[0] + '" onerror="this.style.display=\'none\'" alt="' + name + '">'
+      : placeholder;
+    var photoClick = photos.length > 0 ? ' onclick="lbOpen(roomPhotos[String(' + r.id + ')],0)" style="cursor:zoom-in"' : '';
     var tagsHtml = '';
     for (var j = 0; j < tags.length; j++) tagsHtml += '<span class="tag">'+tags[j]+'</span>';
     tagsHtml += '<span class="tag">All-inclusive</span>';
