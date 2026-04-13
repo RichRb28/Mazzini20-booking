@@ -517,11 +517,23 @@ function renderAdmin(){
       var c=candidature[i];
       var bc=c.status==='approved'?'b-approved':c.status==='rejected'?'b-rejected':'b-pending';
       var bl=c.status==='approved'?'Approvato':c.status==='rejected'?'Rifiutato':'In attesa';
-      html+='<div class="cand-item"><div class="cand-head"><div class="cand-name">'+c.nome+'</div><span class="badge '+bc+'">'+bl+'</span></div>';
-      html+='<div class="cand-info">📌 <strong>'+c.camera+'</strong> — €'+c.prezzo+'/mese<br>📅 '+c.din+' → '+c.dout+'<br>👤 '+c.tipo+(c.univ?' · '+c.univ:'')+(c.azienda?' · '+c.azienda:'')+'<br>📧 '+c.email+' · 📞 '+c.tel+'<br>📎 '+c.doc+'<br>💬 "'+c.bio+'"<br>🕐 '+c.ts+'</div>';
-      html+='<div class="cand-acts"><button class="act-approve" onclick="updateCand('+i+','approved')">✓ Approva</button><button class="act-reject" onclick="updateCand('+i+','rejected')">✗ Rifiuta</button><button class="act-contact" onclick="location.href='mailto:'+c.email+''">📧 Contatta</button></div></div>';
+      html+='<div class="cand-item">';
+      html+='<div class="cand-head"><div class="cand-name">'+c.nome+'</div><span class="badge '+bc+'">'+bl+'</span></div>';
+      html+='<div class="cand-info">📌 <strong>'+c.camera+'</strong> — €'+c.prezzo+'/mese<br>';
+      html+='📅 '+c.din+' → '+c.dout+'<br>';
+      html+='👤 '+c.tipo+(c.univ?' · '+c.univ:'')+(c.azienda?' · '+c.azienda:'')+'<br>';
+      html+='📧 '+c.email+' · 📞 '+c.tel+'<br>';
+      html+='📎 '+c.doc+'<br>💬 '+c.bio+'<br>🕐 '+c.ts+'</div>';
+      html+='<div class="cand-acts">';
+      html+='<button class="act-approve" data-idx="'+i+'" data-action="approve">✓ Approva</button>';
+      html+='<button class="act-reject" data-idx="'+i+'" data-action="reject">✗ Rifiuta</button>';
+      html+='<button class="act-contact" data-email="'+c.email+'">📧 Contatta</button>';
+      html+='</div></div>';
     }
     cl.innerHTML=html;
+    cl.querySelectorAll('.act-approve').forEach(function(b){b.addEventListener('click',function(){updateCand(parseInt(this.dataset.idx),'approved');});});
+    cl.querySelectorAll('.act-reject').forEach(function(b){b.addEventListener('click',function(){updateCand(parseInt(this.dataset.idx),'rejected');});});
+    cl.querySelectorAll('.act-contact').forEach(function(b){b.addEventListener('click',function(){location.href='mailto:'+this.dataset.email;});});
   }
   var vl=document.getElementById('visit-list');
   if(visite.length===0){vl.innerHTML='<div class="empty">Nessuna visita richiesta</div>';}
@@ -531,19 +543,27 @@ function renderAdmin(){
       var v=visite[i];
       var vb=v.status==='confirmed'?'b-confirmed':'b-pending';
       var vl2=v.status==='confirmed'?'Confermata':'Da confermare';
-      vhtml+='<div class="cand-item"><div class="cand-head"><div class="cand-name">'+v.nome+'</div><span class="badge '+vb+'">'+vl2+'</span></div>';
+      vhtml+='<div class="cand-item">';
+      vhtml+='<div class="cand-head"><div class="cand-name">'+v.nome+'</div><span class="badge '+vb+'">'+vl2+'</span></div>';
       vhtml+='<div class="cand-info">📌 '+v.camera+'<br>📅 '+v.day+' · '+v.time+'<br>📧 '+v.email+' · 📞 '+v.tel+(v.note?'<br>💬 '+v.note:'')+'<br>🕐 '+v.ts+'</div>';
-      vhtml+='<div class="cand-acts"><button class="act-approve" onclick="updateVisit('+i+','confirmed')">✓ Conferma</button><button class="act-contact" onclick="location.href='mailto:'+v.email+''">📧 Contatta</button></div></div>';
+      vhtml+='<div class="cand-acts">';
+      vhtml+='<button class="act-approve" data-idx="'+i+'" data-action="confirm">✓ Conferma</button>';
+      vhtml+='<button class="act-contact" data-email="'+v.email+'">📧 Contatta</button>';
+      vhtml+='</div></div>';
     }
     vl.innerHTML=vhtml;
+    vl.querySelectorAll('.act-approve').forEach(function(b){b.addEventListener('click',function(){updateVisit(parseInt(this.dataset.idx),'confirmed');});});
+    vl.querySelectorAll('.act-contact').forEach(function(b){b.addEventListener('click',function(){location.href='mailto:'+this.dataset.email;});});
   }
   var al=document.getElementById('avail-list');
   var ahtml='';
   for(var i=0;i<ROOMS.length;i++){
     var r=ROOMS[i];
-    ahtml+='<div class="rtoggle"><div class="rtoggle-info">'+r.name+'<small>'+r.mq+' mq · €'+r.price+'/mese</small></div><div class="toggle '+(availability[String(r.id)]?'on':'')+'" onclick="toggleAvail(''+r.id+'',this)"></div></div>';
+    ahtml+='<div class="rtoggle"><div class="rtoggle-info">'+r.name+'<small>'+r.mq+' mq · €'+r.price+'/mese</small></div>';
+    ahtml+='<div class="toggle '+(availability[String(r.id)]?'on':'')+'" data-id="'+r.id+'"></div></div>';
   }
   al.innerHTML=ahtml;
+  al.querySelectorAll('.toggle').forEach(function(el){el.addEventListener('click',function(){toggleAvail(this.dataset.id,this);});});
 }
 
 function updateCand(i,status){candidature[i].status=status;try{localStorage.setItem('m20_cand',JSON.stringify(candidature));}catch(e){}renderAdmin();}
