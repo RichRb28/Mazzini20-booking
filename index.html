@@ -488,7 +488,7 @@ function renderGallery(){
   var grid=document.getElementById('gal-grid');
   var html='';
   for(var i=0;i<appPhotos.length;i++){
-    html+='<div class="gal-img" onclick="lbOpen(appPhotos,'+i+')"><img src="'+appPhotos[i]+'" onerror="this.parentElement.style.display='none'"></div>';
+    html+='<div class="gal-img" onclick="lbOpen(appPhotos,'+i+')"><img src="'+appPhotos[i]+'"></div>';
   }
   grid.innerHTML=html||'<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa;font-size:13px">📷 Foto in arrivo presto.</div>';
 }
