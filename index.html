@@ -6,7 +6,27 @@
 <title>Via Mazzini 20 — Affitto camere Torino</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+function openGalleriaSection() {
+  var sec = document.getElementById('galleria-section');
+  var isVisible = sec.style.display !== 'none';
+  sec.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    renderGalleriaSection();
+    sec.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function renderGalleriaSection() {
+  var grid = document.getElementById('galleria-grid');
+  var html = '';
+  for (var i = 0; i < appPhotos.length; i++) {
+    html += '<div class="gal-img" onclick="lbOpen(appPhotos,' + i + ')"><img src="' + appPhotos[i] + '" onerror="this.parentElement.style.display='none'"></div>';
+  }
+  grid.innerHTML = html || '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa;font-size:13px">📷 Foto in arrivo presto.</div>';
+}
+
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--blue:#1a56db;--dark:#1a1a2e;--light:#f7f8ff;--border:#eee;--muted:#777}
@@ -31,11 +51,11 @@ nav{background:var(--dark);padding:14px 24px;display:flex;align-items:center;jus
 .sec-label{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
 .sec-heading{font-size:22px;font-weight:700;color:var(--dark);margin-bottom:8px}
 .sec-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px}
-.feat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px}
-.feat-icon{font-size:44px;margin-bottom:12px}
-.feat h4{font-size:12px;font-weight:600;color:var(--dark);margin-bottom:4px}
-.feat p{font-size:11px;color:var(--muted);line-height:1.5}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+.feat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;aspect-ratio:1}
+.feat-icon{font-size:28px;margin-bottom:6px}
+.feat h4{font-size:11px;font-weight:600;color:var(--dark);margin-bottom:3px}
+.feat p{font-size:10px;color:var(--muted);line-height:1.4}
 .rooms{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .room-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:box-shadow 0.2s}
 .room-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08)}
@@ -140,6 +160,7 @@ footer strong{color:rgba(255,255,255,0.7)}
   <div class="brand">Mazzini <em>20</em></div>
   <div style="display:flex;align-items:center;gap:12px">
     <button class="nav-link" onclick="openGallery()" id="nav-app">Appartamento</button>
+    <button class="nav-link" onclick="openGalleriaSection()" id="nav-galleria">Galleria</button>
     <button class="nav-link" onclick="switchLang()" id="lang-btn" style="border:1px solid rgba(255,255,255,0.25);padding:4px 10px;border-radius:12px;font-size:11px">EN</button>
   </div>
   <button class="nav-cta" onclick="openAdminLogin()">Admin</button>
@@ -167,9 +188,9 @@ footer strong{color:rgba(255,255,255,0.7)}
     <div class="feat"><div class="feat-icon">🛋️</div><h4 id="f1t">Arredi nuovi 2026</h4><p id="f1d">Letto 1.5 piazze, scrivania ergonomica, armadio, libreria, luci dedicate</p></div>
     <div class="feat"><div class="feat-icon">🪵</div><h4 id="f2t">Parquet in legno</h4><p id="f2d">Parquet nelle camere, microcemento nelle parti comuni</p></div>
     <div class="feat"><div class="feat-icon">🚿</div><h4 id="f3t">Bagno ristrutturato</h4><p id="f3d">Doccia, lavello, WC, bidet, acqua calda da caldaia a gas nuova</p></div>
-    <div class="feat"><div class="feat-icon">👕</div><h4 id="f4t">Lavasciuga</h4><p id="f4d">Lavasciuga condivisa — niente stendini in camera</p></div>
+    <div class="feat"><div class="feat-icon">👕</div><h4 id="f4t">Lavatrice</h4><p id="f4d">Lavatrice condivisa</p></div>
     <div class="feat"><div class="feat-icon">📶</div><h4 id="f5t">Internet fibra</h4><p id="f5d">Connessione fibra inclusa nel canone</p></div>
-    <div class="feat"><div class="feat-icon">📺</div><h4 id="f6t">Smart TV in cucina</h4><p id="f6d">Cucina abitabile con Smart TV, macchina del caff&egrave;, microonde</p></div>
+    <div class="feat"><div class="feat-icon">🍳</div><h4 id="f6t">Cucina abitabile</h4><p id="f6d">Cucina con tavolo, 4 sedie, frigorifero e fornelli a gas</p></div>
     <div class="feat"><div class="feat-icon">🪟</div><h4 id="f7t">Infissi doppio vetro</h4><p id="f7d">Serramenti moderni per isolamento termico e acustico</p></div>
     <div class="feat"><div class="feat-icon">🚲</div><h4 id="f8t">Posteggio bici</h4><p id="f8d">Cortile interno condominiale per il parcheggio biciclette</p></div>
     <div class="feat"><div class="feat-icon">📱</div><h4 id="f9t">Portale inquilini</h4><p id="f9d">App dedicata per guasti, servizi extra, rinnovi e assistenza h24</p></div>
@@ -179,8 +200,19 @@ footer strong{color:rgba(255,255,255,0.7)}
 <div class="section">
   <div class="sec-label" id="lbl-cam">Disponibilit&agrave; camere</div>
   <div class="sec-heading" id="h-cam">Scegli la tua camera</div>
-  <div class="sec-sub" id="sub-cam">Camere disponibili da giugno 2026. Canoni all-inclusive — nessun costo aggiuntivo.</div>
+  <div class="sec-sub" id="sub-cam">Camere disponibili da metà settembre 2026. Canoni all-inclusive — nessun costo aggiuntivo.</div>
   <div class="rooms" id="rooms-grid"></div>
+</div>
+
+
+<!-- GALLERIA SECTION -->
+<div id="galleria-section" style="display:none">
+  <div class="section">
+    <div class="sec-label" id="lbl-gal">Galleria fotografica</div>
+    <div class="sec-heading" id="h-gal">L&rsquo;appartamento in foto</div>
+    <div class="sec-sub" id="sub-gal">Zone comuni, cucina, bagni e dettagli dell&rsquo;appartamento.</div>
+    <div class="gal-grid" id="galleria-grid"></div>
+  </div>
 </div>
 
 <footer>
@@ -241,14 +273,14 @@ footer strong{color:rgba(255,255,255,0.7)}
     </div>
     <div class="sec-title">Periodo richiesto</div>
     <div class="frow">
-      <div class="fgroup"><label>Data ingresso *</label><input type="date" id="f-din" min="2026-06-01"></div>
+      <div class="fgroup"><label>Data ingresso *</label><input type="date" id="f-din" min="2026-09-15"></div>
       <div class="fgroup"><label>Data uscita *</label><input type="date" id="f-dout" min="2026-07-01"></div>
     </div>
     <div class="sec-title">Presentati</div>
     <div class="fgroup"><label>Breve presentazione *</label><textarea id="f-bio" rows="3" placeholder="Chi sei e perch&eacute; cerchi alloggio a Torino..."></textarea></div>
 <div class="btn-row">
       <button class="btn-cancel" onclick="closeCand()">Annulla</button>
-      <button class="btn-submit" onclick="submitCand()">Invia candidatura</button>
+      <button class="btn-submit" id="cand-submit-btn">Invia candidatura</button>
     </div>
   </div>
 </div>
@@ -272,7 +304,7 @@ footer strong{color:rgba(255,255,255,0.7)}
     <div class="fgroup"><label>Note (opzionale)</label><textarea id="v-note" rows="2" placeholder="Eventuali domande..."></textarea></div>
     <div class="btn-row">
       <button class="btn-cancel" onclick="closeVisit()">Annulla</button>
-      <button class="btn-submit" onclick="submitVisit()">Prenota visita</button>
+      <button class="btn-submit" id="visit-submit-btn">Prenota visita</button>
     </div>
   </div>
 </div>
@@ -345,10 +377,10 @@ var EMAILJS_TID = 'template_0uw71ek';
 var currentLang = 'it';
 
 var ROOMS = [
-  {id:1,name:'Camera 1',nameEN:'Room 1',mq:'9.61',tags:['Finestra','Parquet','Arredata'],tagsEN:['Window','Hardwood','Furnished'],price:510,desc:'Camera singola accogliente, ideale per chi cerca una soluzione centrale a prezzo contenuto.',descEN:'Cozy single room, ideal for those seeking a central location at a competitive price.'},
-  {id:2,name:'Camera 2',nameEN:'Room 2',mq:'11.25',tags:['Finestra','Parquet','Arredata'],tagsEN:['Window','Hardwood','Furnished'],price:550,desc:'Camera luminosa con buona metratura, perfetta per studenti e lavoratori.',descEN:'Bright room with good dimensions, perfect for students and workers.'},
-  {id:3,name:'Camera 3',nameEN:'Room 3',mq:'14.59',tags:['Balcone','Parquet','Arredata'],tagsEN:['Balcony','Hardwood','Furnished'],price:600,desc:'Camera spaziosa con balcone privato e ottima esposizione.',descEN:'Spacious room with private balcony and excellent sun exposure.'},
-  {id:4,name:'Camera 4',nameEN:'Room 4',mq:'19.03',tags:['2 Balconi','Finestra','Parquet','Arredata'],tagsEN:['2 Balconies','Window','Hardwood','Furnished'],price:680,desc:"La camera più grande con due balconi. La soluzione premium dell'appartamento.",descEN:'The largest room with two balconies. The premium choice of the apartment.'}
+  {id:1,name:'Camera 1',nameEN:'Room 1',mq:'9.61',tags:['Finestra','Parquet','Arredata'],tagsEN:['Window','Hardwood','Furnished'],price:650,desc:'Camera singola accogliente, ideale per chi cerca una soluzione centrale a prezzo contenuto.',descEN:'Cozy single room, ideal for those seeking a central location at a competitive price.'},
+  {id:2,name:'Camera 2',nameEN:'Room 2',mq:'11.25',tags:['Balcone','Parquet','Arredata'],tagsEN:['Balcony','Hardwood','Furnished'],price:700,desc:'Camera luminosa con buona metratura, perfetta per studenti e lavoratori.',descEN:'Bright room with good dimensions, perfect for students and workers.'},
+  {id:3,name:'Camera 3',nameEN:'Room 3',mq:'14.59',tags:['Finestra','Parquet','Arredata'],tagsEN:['Window','Hardwood','Furnished'],price:750,desc:'Camera spaziosa con ottima esposizione alla luce naturale.',descEN:'Spacious room with excellent natural light exposure.'},
+  {id:4,name:'Camera 4',nameEN:'Room 4',mq:'19.03',tags:['2 Balconi','Finestra','Parquet','Arredata'],tagsEN:['2 Balconies','Window','Hardwood','Furnished'],price:800,desc:"La camera più grande con due balconi. La soluzione premium dell'appartamento.",descEN:'The largest room with two balconies. The premium choice of the apartment.'}
 ];
 
 var roomPhotos = {"1": ["cam1_1.jpg", "cam1_2.jpg", "cam1_3.jpg", "cam1_4.jpg", "cam1_5.jpg", "cam1_6.jpg", "cam1_7.jpg", "cam1_8.jpg", "cam1_9.jpg", "cam1_10.jpg", "cam1_11.jpg", "cam1_12.jpg", "cam1_13.jpg", "cam1_14.jpg", "cam1_15.jpg", "cam1_16.jpg", "cam1_17.jpg", "cam1_18.jpg", "cam1_19.jpg", "cam1_20.jpg"], "2": ["cam2_1.jpg", "cam2_2.jpg", "cam2_3.jpg", "cam2_4.jpg", "cam2_5.jpg", "cam2_6.jpg", "cam2_7.jpg", "cam2_8.jpg", "cam2_9.jpg", "cam2_10.jpg", "cam2_11.jpg", "cam2_12.jpg", "cam2_13.jpg", "cam2_14.jpg", "cam2_15.jpg", "cam2_16.jpg", "cam2_17.jpg", "cam2_18.jpg", "cam2_19.jpg", "cam2_20.jpg"], "3": ["cam3_1.jpg", "cam3_2.jpg", "cam3_3.jpg", "cam3_4.jpg", "cam3_5.jpg", "cam3_6.jpg", "cam3_7.jpg", "cam3_8.jpg", "cam3_9.jpg", "cam3_10.jpg", "cam3_11.jpg", "cam3_12.jpg", "cam3_13.jpg", "cam3_14.jpg", "cam3_15.jpg", "cam3_16.jpg", "cam3_17.jpg", "cam3_18.jpg", "cam3_19.jpg", "cam3_20.jpg"], "4": ["cam4_1.jpg", "cam4_2.jpg", "cam4_3.jpg", "cam4_4.jpg", "cam4_5.jpg", "cam4_6.jpg", "cam4_7.jpg", "cam4_8.jpg", "cam4_9.jpg", "cam4_10.jpg", "cam4_11.jpg", "cam4_12.jpg", "cam4_13.jpg", "cam4_14.jpg", "cam4_15.jpg", "cam4_16.jpg", "cam4_17.jpg", "cam4_18.jpg", "cam4_19.jpg", "cam4_20.jpg"]};
@@ -361,6 +393,10 @@ var selectedRoom = null;
 window.onload = function() {
   if (typeof emailjs !== 'undefined') emailjs.init(EMAILJS_PK);
   renderRooms();
+  var candBtn = document.getElementById('cand-submit-btn');
+  if (candBtn) candBtn.addEventListener('click', function() { submitCand(); });
+  var visitBtn = document.getElementById('visit-submit-btn');
+  if (visitBtn) visitBtn.addEventListener('click', function() { submitVisit(); });
 };
 
 function renderRooms() {
@@ -384,7 +420,7 @@ function renderRooms() {
     var b1 = it ? 'Candidati per questa camera' : 'Apply for this room';
     var b2 = it ? 'Prenota visita' : 'Book a visit';
     var bDis = it ? 'Non disponibile' : 'Not available';
-    var from = it ? 'All-inclusive · Disponibile da giugno 2026' : 'All-inclusive · Available from June 2026';
+    var from = it ? 'All-inclusive · Disponibile da metà settembre 2026' : 'All-inclusive · Available from mid-September 2026';
     var btns = avail
       ? '<button class="rbtn rbtn-pri" onclick="openCand('+r.id+')">'+b1+'</button><button class="rbtn rbtn-sec" onclick="openVisit('+r.id+')">'+b2+'</button>'
       : '<button class="rbtn rbtn-dis" disabled>'+bDis+'</button>';
@@ -429,12 +465,12 @@ function submitCand(){
   var dout=document.getElementById('f-dout').value;
   var bio=document.getElementById('f-bio').value.trim();
   if(!nome||!cognome||!email||!tel||!tipo||!din||!dout||!bio){alert('Compila tutti i campi obbligatori (*)');return;}
-  var c={id:Date.now(),nome:nome+' '+cognome,email:email,tel:tel,tipo:tipo,camera:selectedRoom.name,prezzo:selectedRoom.price,din:din,dout:dout,bio:bio,doc:docFile?docFile.name:'Non caricato',univ:document.getElementById('f-univ').value,azienda:document.getElementById('f-azienda').value,status:'pending',ts:new Date().toLocaleString('it-IT')};
+  var c={id:Date.now(),nome:nome+' '+cognome,email:email,tel:tel,tipo:tipo,camera:selectedRoom.name,prezzo:selectedRoom.price,din:din,dout:dout,bio:bio,univ:document.getElementById('f-univ').value,azienda:document.getElementById('f-azienda').value,status:'pending',ts:new Date().toLocaleString('it-IT')};
   candidature.push(c);
   try{localStorage.setItem('m20_cand',JSON.stringify(candidature));}catch(e){}
-  sendEmail('[Mazzini 20] Nuova candidatura — '+selectedRoom.name,c.nome,c.email,c.tel,c.tipo,c.univ||c.azienda||'—',c.camera,c.prezzo,c.din,c.dout,c.bio,'—',c.ts);
   closeCand();
   showSuccess('✅','Candidatura inviata!','Abbiamo ricevuto la tua candidatura. Ti risponderemo entro 24 ore lavorative.');
+  sendEmail('[Mazzini 20] Nuova candidatura — '+selectedRoom.name,c.nome,c.email,c.tel,c.tipo,c.univ||c.azienda||'—',c.camera,c.prezzo,c.din,c.dout,c.bio,'—',c.ts);
 }
 
 function submitVisit(){
@@ -445,14 +481,24 @@ function submitVisit(){
   var v={id:Date.now(),nome:nome,email:email,tel:tel,day:document.getElementById('v-day').value||'Nessuna',time:document.getElementById('v-time').value||'Nessuna',camera:document.getElementById('v-cam').value,note:document.getElementById('v-note').value,status:'pending',ts:new Date().toLocaleString('it-IT')};
   visite.push(v);
   try{localStorage.setItem('m20_visite',JSON.stringify(visite));}catch(e){}
-  sendEmail('[Mazzini 20] Richiesta visita — '+v.camera,v.nome,v.email,v.tel,'Visita','—',v.camera,'—',v.day+' '+v.time,'—',v.note||'—','—',v.ts);
   closeVisit();
   showSuccess('📅','Visita richiesta!','Ti contatteremo entro 24 ore per confermare data e orario.');
+  sendEmail('[Mazzini 20] Richiesta visita — '+v.camera,v.nome,v.email,v.tel,'Visita','—',v.camera,'—',v.day+' '+v.time,'—',v.note||'—','—',v.ts);
 }
 
 function sendEmail(subject,nome,email,tel,tipo,univ,camera,prezzo,datain,dataout,bio,documento,timestamp){
-  if(typeof emailjs==='undefined')return;
-  emailjs.send(EMAILJS_SID,EMAILJS_TID,{to_email:OWNER_EMAIL,subject:subject,nome:nome,email:email,tel:tel,tipo:tipo,univ_azienda:univ,camera:camera,prezzo:prezzo,datain:datain,dataout:dataout,bio:bio,documento:documento,timestamp:timestamp});
+  if(typeof emailjs==='undefined'){
+    console.log('EmailJS non disponibile');
+    return;
+  }
+  emailjs.send(EMAILJS_SID,EMAILJS_TID,{
+    to_email:OWNER_EMAIL,subject:subject,nome:nome,email:email,tel:tel,tipo:tipo,
+    univ_azienda:univ,camera:camera,prezzo:prezzo,datain:datain,dataout:dataout,
+    bio:bio,documento:documento,timestamp:timestamp
+  }).then(
+    function(){ console.log('Email inviata OK'); },
+    function(err){ console.log('Errore email:',JSON.stringify(err)); alert('Candidatura salvata! Nota: la notifica email ha avuto un problema tecnico. Verrai comunque contattato.'); }
+  );
 }
 
 function showSuccess(icon,title,msg){
@@ -590,11 +636,11 @@ function switchLang(){
   document.getElementById('sub-app').textContent=it?'Via Mazzini 20, secondo piano con ascensore, a pochi passi da Piazza Bodoni nel cuore di Torino.':'Via Mazzini 20, second floor with elevator, steps from Piazza Bodoni in the heart of Turin.';
   document.getElementById('lbl-cam').textContent=it?'Disponibilità camere':'Room availability';
   document.getElementById('h-cam').textContent=it?'Scegli la tua camera':'Choose your room';
-  document.getElementById('sub-cam').textContent=it?'Camere disponibili da giugno 2026. Canoni all-inclusive — nessun costo aggiuntivo.':'Rooms available from June 2026. All-inclusive rates — no extra costs.';
-  var fTIT=['Arredi nuovi 2026','Parquet in legno','Bagno ristrutturato','Lavasciuga','Internet fibra','Smart TV in cucina','Infissi doppio vetro','Posteggio bici','Portale inquilini'];
-  var fTEN=['New furniture 2026','Hardwood floors','Renovated bathroom','Washer-dryer','Fiber internet','Smart TV in kitchen','Double-glazed windows','Bike parking','Tenant portal'];
-  var fDIT=['Letto 1.5 piazze, scrivania ergonomica, armadio, libreria, luci dedicate','Parquet nelle camere, microcemento nelle parti comuni','Doccia, lavello, WC, bidet, acqua calda da caldaia a gas nuova','Lavasciuga condivisa — niente stendini in camera','Connessione fibra inclusa nel canone','Cucina abitabile con Smart TV, macchina del caffè, microonde','Serramenti moderni per isolamento termico e acustico','Cortile interno condominiale per il parcheggio biciclette','App dedicata per guasti, servizi extra, rinnovi e assistenza h24'];
-  var fDEN=['Single bed, ergonomic desk, wardrobe, bookcase, dedicated lighting','Hardwood in bedrooms, microcement in common areas','Shower, sink, WC, bidet, hot water from new gas boiler','Shared washer-dryer — no drying racks in rooms','High-speed fiber included in rent','Eat-in kitchen with Smart TV, coffee machine, microwave','Modern frames for thermal and acoustic insulation','Building courtyard for bicycle parking','Dedicated app for maintenance, extra services and 24/7 support'];
+  document.getElementById('sub-cam').textContent=it?'Camere disponibili da metà settembre 2026. Canoni all-inclusive — nessun costo aggiuntivo.':'Rooms available from mid-September 2026. All-inclusive rates — no extra costs.';
+  var fTIT=['Arredi nuovi 2026','Parquet in legno','Bagno ristrutturato','Lavatrice','Internet fibra','Smart TV in cucina','Infissi doppio vetro','Posteggio bici','Portale inquilini'];
+  var fTEN=['New furniture 2026','Hardwood floors','Renovated bathroom','Washing machine','Fiber internet','Smart TV in kitchen','Double-glazed windows','Bike parking','Tenant portal'];
+  var fDIT=['Letto 1.5 piazze, scrivania ergonomica, armadio, libreria, luci dedicate','Parquet nelle camere, microcemento nelle parti comuni','Doccia, lavello, WC, bidet, acqua calda da caldaia a gas nuova','Lavatrice condivisa','Connessione fibra inclusa nel canone','Cucina abitabile con Smart TV, macchina del caffè, microonde','Serramenti moderni per isolamento termico e acustico','Cortile interno condominiale per il parcheggio biciclette','App dedicata per guasti, servizi extra, rinnovi e assistenza h24'];
+  var fDEN=['Single bed, ergonomic desk, wardrobe, bookcase, dedicated lighting','Hardwood in bedrooms, microcement in common areas','Shower, sink, WC, bidet, hot water from new gas boiler','Shared washing machine','High-speed fiber included in rent','Eat-in kitchen with table, 4 chairs, fridge and gas stove','Modern frames for thermal and acoustic insulation','Building courtyard for bicycle parking','Dedicated app for maintenance, extra services and 24/7 support'];
   for(var i=1;i<=9;i++){
     var el=document.getElementById('f'+i+'t');
     var el2=document.getElementById('f'+i+'d');
@@ -603,9 +649,33 @@ function switchLang(){
   }
   document.getElementById('footer-txt').innerHTML=it?'<strong>Via Mazzini 20 &middot; Torino &middot; Piano 2</strong><br>Zona Piazza Bodoni &middot; Centro storico<br>Per informazioni prenota direttamente online':'<strong>Via Mazzini 20 &middot; Turin &middot; Floor 2</strong><br>Piazza Bodoni area &middot; Historic center<br>For info book directly online';
   document.getElementById('gal-title').textContent=it?'Appartamento — Zone comuni':'Apartment — Common areas';
+  var lg=document.getElementById('lbl-gal'); if(lg) lg.textContent=it?'Galleria fotografica':'Photo gallery';
+  var hg=document.getElementById('h-gal'); if(hg) hg.textContent=it?'L\'appartamento in foto':'The apartment in photos';
+  var sg=document.getElementById('sub-gal'); if(sg) sg.textContent=it?'Zone comuni, cucina, bagni e dettagli dell\'appartamento.':'Common areas, kitchen, bathrooms and apartment details.';
+  var ng=document.getElementById('nav-galleria'); if(ng) ng.textContent=it?'Galleria':'Gallery';
   document.getElementById('gal-sub').textContent=it?'Cucina, bagno, corridoio e parti comuni':'Kitchen, bathroom, corridor and common areas';
   renderRooms();
 }
+
+function openGalleriaSection() {
+  var sec = document.getElementById('galleria-section');
+  var isVisible = sec.style.display !== 'none';
+  sec.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    renderGalleriaSection();
+    sec.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function renderGalleriaSection() {
+  var grid = document.getElementById('galleria-grid');
+  var html = '';
+  for (var i = 0; i < appPhotos.length; i++) {
+    html += '<div class="gal-img" onclick="lbOpen(appPhotos,' + i + ')"><img src="' + appPhotos[i] + '" onerror="this.parentElement.style.display='none'"></div>';
+  }
+  grid.innerHTML = html || '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa;font-size:13px">📷 Foto in arrivo presto.</div>';
+}
+
 </script>
 </body>
 </html>
