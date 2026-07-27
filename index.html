@@ -33,8 +33,8 @@ nav{background:var(--dark);padding:14px 24px;display:flex;align-items:center;jus
 .sec-heading{font-size:22px;font-weight:700;color:var(--dark);margin-bottom:8px}
 .sec-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
 .features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
-.feat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;text-align:center;aspect-ratio:1}
-.feat-icon{font-size:28px;margin-bottom:6px}
+.feat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.feat-icon{font-size:36px;margin-bottom:8px}
 .feat h4{font-size:11px;font-weight:600;color:var(--dark);margin-bottom:3px}
 .feat p{font-size:10px;color:var(--muted);line-height:1.4}
 .rooms{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -351,7 +351,7 @@ var ROOMS = [
   {id:1,name:'Camera 1',nameEN:'Room 1',mq:'9.61',tags:['Finestra','Parquet','Arredata'],tagsEN:['Window','Hardwood','Furnished'],price:650,desc:'Camera singola accogliente, ideale per chi cerca una soluzione centrale a prezzo contenuto.',descEN:'Cozy single room, ideal for those seeking a central location at a competitive price.'},
   {id:2,name:'Camera 2',nameEN:'Room 2',mq:'11.25',tags:['Balcone','Parquet','Arredata'],tagsEN:['Balcony','Hardwood','Furnished'],price:700,desc:'Camera luminosa con buona metratura, perfetta per studenti e lavoratori.',descEN:'Bright room with good dimensions, perfect for students and workers.'},
   {id:3,name:'Camera 3',nameEN:'Room 3',mq:'14.59',tags:['Finestra','Parquet','Arredata'],tagsEN:['Window','Hardwood','Furnished'],price:750,desc:'Camera spaziosa con ottima esposizione alla luce naturale.',descEN:'Spacious room with excellent natural light exposure.'},
-  {id:4,name:'Camera 4',nameEN:'Room 4',mq:'19.03',tags:['2 Balconi','Finestra','Parquet','Arredata'],tagsEN:['2 Balconies','Window','Hardwood','Furnished'],price:800,desc:"La camera più grande con due balconi. La soluzione premium dell'appartamento.",descEN:'The largest room with two balconies. The premium choice of the apartment.'}
+  {id:4,name:'Camera 4',nameEN:'Room 4',mq:'19.03',tags:['2 Balconi','Parquet','Arredata'],tagsEN:['2 Balconies','Hardwood','Furnished'],price:800,desc:"La camera più grande con due balconi. La soluzione premium dell'appartamento.",descEN:'The largest room with two balconies. The premium choice of the apartment.'}
 ];
 
 var roomPhotos = {"1": ["cam1_1.jpg", "cam1_2.jpg", "cam1_3.jpg", "cam1_4.jpg", "cam1_5.jpg", "cam1_6.jpg", "cam1_7.jpg", "cam1_8.jpg", "cam1_9.jpg", "cam1_10.jpg", "cam1_11.jpg", "cam1_12.jpg", "cam1_13.jpg", "cam1_14.jpg", "cam1_15.jpg", "cam1_16.jpg", "cam1_17.jpg", "cam1_18.jpg", "cam1_19.jpg", "cam1_20.jpg"], "2": ["cam2_1.jpg", "cam2_2.jpg", "cam2_3.jpg", "cam2_4.jpg", "cam2_5.jpg", "cam2_6.jpg", "cam2_7.jpg", "cam2_8.jpg", "cam2_9.jpg", "cam2_10.jpg", "cam2_11.jpg", "cam2_12.jpg", "cam2_13.jpg", "cam2_14.jpg", "cam2_15.jpg", "cam2_16.jpg", "cam2_17.jpg", "cam2_18.jpg", "cam2_19.jpg", "cam2_20.jpg"], "3": ["cam3_1.jpg", "cam3_2.jpg", "cam3_3.jpg", "cam3_4.jpg", "cam3_5.jpg", "cam3_6.jpg", "cam3_7.jpg", "cam3_8.jpg", "cam3_9.jpg", "cam3_10.jpg", "cam3_11.jpg", "cam3_12.jpg", "cam3_13.jpg", "cam3_14.jpg", "cam3_15.jpg", "cam3_16.jpg", "cam3_17.jpg", "cam3_18.jpg", "cam3_19.jpg", "cam3_20.jpg"], "4": ["cam4_1.jpg", "cam4_2.jpg", "cam4_3.jpg", "cam4_4.jpg", "cam4_5.jpg", "cam4_6.jpg", "cam4_7.jpg", "cam4_8.jpg", "cam4_9.jpg", "cam4_10.jpg", "cam4_11.jpg", "cam4_12.jpg", "cam4_13.jpg", "cam4_14.jpg", "cam4_15.jpg", "cam4_16.jpg", "cam4_17.jpg", "cam4_18.jpg", "cam4_19.jpg", "cam4_20.jpg"]};
@@ -381,9 +381,10 @@ function renderRooms() {
     var name = it ? r.name : r.nameEN;
     var desc = it ? r.desc : r.descEN;
     var tags = it ? r.tags : r.tagsEN;
+    var placeholder = '<div class="room-placeholder"><div>📷</div><p>' + (it ? 'Foto in arrivo' : 'Photos coming soon') + '</p></div>';
     var photoHtml = photos.length > 0
-      ? '<img src="' + photos[0] + '" alt="' + name + '">'
-      : '<div class="room-placeholder"><div>📷</div><p>' + (it ? 'Foto in arrivo' : 'Photos coming soon') + '</p></div>';
+      ? '<img src="' + photos[0] + '" alt="' + name + '" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">' + placeholder
+      : placeholder;
     var photoClick = photos.length > 0 ? ' onclick="lbOpen(roomPhotos[String(' + r.id + ')], 0)" style="cursor:zoom-in"' : '';
     var tagsHtml = '';
     for (var j = 0; j < tags.length; j++) tagsHtml += '<span class="tag">'+tags[j]+'</span>';
@@ -573,8 +574,16 @@ var _lbAll=[],_lbIdx=0;
 function lbOpen(arr,idx){if(!arr||arr.length===0)return;_lbAll=arr;_lbIdx=idx||0;lbShow();}
 function lbShow(){
   var img=document.getElementById('lb-img');
-  img.onerror=function(){if(_lbAll.length>1)lbStep(1);else lbClose();};
+  // Skip photos that don't exist
+  var tried=0;
+  function tryNext(){
+    if(tried>=_lbAll.length){lbClose();return;}
+    img.onerror=function(){tried++;_lbIdx=(_lbIdx+1)%_lbAll.length;tryNext();};
+    img.src=_lbAll[_lbIdx];
+    tried++;
+  }
   img.src=_lbAll[_lbIdx];
+  img.onerror=function(){if(_lbAll.length>1)lbStep(1);else lbClose();};
   var show=_lbAll.length>1;
   document.getElementById('lb-prev').style.display=show?'':'none';
   document.getElementById('lb-next').style.display=show?'':'none';
