@@ -42,7 +42,7 @@ nav{background:var(--dark);padding:14px 24px;display:flex;align-items:center;jus
 .room-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08)}
 .room-img{height:160px;background:linear-gradient(135deg,#e8ecff,#f0f4ff);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .room-img img{width:100%;height:100%;object-fit:cover}
-.room-placeholder{text-align:center;color:#aaa}
+.room-placeholder{text-align:center;color:#aaa} img.room-cover-img ~ .room-placeholder{display:none}
 .room-placeholder div{font-size:32px;margin-bottom:6px}
 .room-placeholder p{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:1px}
 .avail-badge{position:absolute;top:10px;right:10px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700}
@@ -364,6 +364,21 @@ var selectedRoom = null;
 window.onload = function() {
   if (typeof emailjs !== 'undefined') emailjs.init(EMAILJS_PK);
   renderRooms();
+  // Global handler for missing room photos
+  document.addEventListener('error', function(e) {
+    if (e.target.tagName === 'IMG' && e.target.classList.contains('room-cover-img')) {
+      e.target.style.display = 'none';
+      var next = e.target.nextElementSibling;
+      if (next) next.style.display = 'flex';
+    }
+  }, true);
+  // Hide placeholders when img loads successfully
+  document.addEventListener('load', function(e) {
+    if (e.target.tagName === 'IMG' && e.target.classList.contains('room-cover-img')) {
+      var next = e.target.nextElementSibling;
+      if (next) next.style.display = 'none';
+    }
+  }, true);
   var candBtn = document.getElementById('cand-submit-btn');
   if (candBtn) candBtn.addEventListener('click', function() { submitCand(); });
   var visitBtn = document.getElementById('visit-submit-btn');
@@ -383,7 +398,7 @@ function renderRooms() {
     var tags = it ? r.tags : r.tagsEN;
     var placeholder = '<div class="room-placeholder"><div>📷</div><p>' + (it ? 'Foto in arrivo' : 'Photos coming soon') + '</p></div>';
     var photoHtml = photos.length > 0
-      ? '<img src="' + photos[0] + '" alt="' + name + '" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">' + placeholder
+      ? '<img src="' + photos[0] + '" alt="' + name + '" class="room-cover-img">' + placeholder
       : placeholder;
     var photoClick = photos.length > 0 ? ' onclick="lbOpen(roomPhotos[String(' + r.id + ')], 0)" style="cursor:zoom-in"' : '';
     var tagsHtml = '';
