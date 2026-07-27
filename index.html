@@ -7,22 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-function openGalleriaSection() {
-  var sec = document.getElementById('galleria-section');
-  var isVisible = sec.style.display !== 'none';
-  sec.style.display = isVisible ? 'none' : 'block';
-  if (!isVisible) {
-    renderGalleriaSection();
-    sec.scrollIntoView({ behavior: 'smooth' });
-  }
-}
-
-function renderGalleriaSection() {
-  var grid = document.getElementById('galleria-grid');
-  var html = '';
-  for (var i = 0; i < appPhotos.length; i++) {
-    html += '<div class="gal-img" onclick="lbOpen(appPhotos,' + i + ')"><img src="' + appPhotos[i] + '" onerror="this.parentElement.style.display='none'"></div>';
-  }
   grid.innerHTML = html || '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa;font-size:13px">📷 Foto in arrivo presto.</div>';
 }
 
@@ -160,7 +144,6 @@ footer strong{color:rgba(255,255,255,0.7)}
   <div class="brand">Mazzini <em>20</em></div>
   <div style="display:flex;align-items:center;gap:12px">
     <button class="nav-link" onclick="openGallery()" id="nav-app">Appartamento</button>
-    <button class="nav-link" onclick="openGalleriaSection()" id="nav-galleria">Galleria</button>
     <button class="nav-link" onclick="switchLang()" id="lang-btn" style="border:1px solid rgba(255,255,255,0.25);padding:4px 10px;border-radius:12px;font-size:11px">EN</button>
   </div>
   <button class="nav-cta" onclick="openAdminLogin()">Admin</button>
@@ -205,15 +188,6 @@ footer strong{color:rgba(255,255,255,0.7)}
 </div>
 
 
-<!-- GALLERIA SECTION -->
-<div id="galleria-section" style="display:none">
-  <div class="section">
-    <div class="sec-label" id="lbl-gal">Galleria fotografica</div>
-    <div class="sec-heading" id="h-gal">L&rsquo;appartamento in foto</div>
-    <div class="sec-sub" id="sub-gal">Zone comuni, cucina, bagni e dettagli dell&rsquo;appartamento.</div>
-    <div class="gal-grid" id="galleria-grid"></div>
-  </div>
-</div>
 
 <footer>
   <p id="footer-txt"><strong>Via Mazzini 20 &middot; Torino &middot; Piano 2</strong><br>Zona Piazza Bodoni &middot; Centro storico<br>Per informazioni prenota direttamente online</p>
@@ -657,22 +631,6 @@ function switchLang(){
   renderRooms();
 }
 
-function openGalleriaSection() {
-  var sec = document.getElementById('galleria-section');
-  var isVisible = sec.style.display !== 'none';
-  sec.style.display = isVisible ? 'none' : 'block';
-  if (!isVisible) {
-    renderGalleriaSection();
-    sec.scrollIntoView({ behavior: 'smooth' });
-  }
-}
-
-function renderGalleriaSection() {
-  var grid = document.getElementById('galleria-grid');
-  var html = '';
-  for (var i = 0; i < appPhotos.length; i++) {
-    html += '<div class="gal-img" onclick="lbOpen(appPhotos,' + i + ')"><img src="' + appPhotos[i] + '" onerror="this.parentElement.style.display='none'"></div>';
-  }
   grid.innerHTML = html || '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa;font-size:13px">📷 Foto in arrivo presto.</div>';
 }
 
