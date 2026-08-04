@@ -481,11 +481,22 @@ function openGallery() { renderGallery(); document.getElementById("gallery-ov").
 function closeGallery() { document.getElementById("gallery-ov").classList.remove("open"); document.body.style.overflow = ""; }
 function renderGallery() {
   var grid = document.getElementById("gal-grid");
+  if (appPhotos.length === 0) {
+    grid.innerHTML = "<div style='grid-column:1/-1;text-align:center;padding:40px;color:#aaa;font-size:13px'>Foto in arrivo presto.</div>";
+    return;
+  }
   var html = "";
   for (var i = 0; i < appPhotos.length; i++) {
-    html += "<div class="gal-img" onclick="lbOpen(appPhotos," + i + ")"><img src="" + appPhotos[i] + "" onerror="this.parentElement.style.display=\'none\'"></div>";
+    html += "<div class='gal-img' data-idx='" + i + "'><img src='" + appPhotos[i] + "' class='gal-photo'></div>";
   }
-  grid.innerHTML = html || "<div style="grid-column:1/-1;text-align:center;padding:40px;color:#aaa;font-size:13px">Foto in arrivo presto.</div>";
+  grid.innerHTML = html;
+  grid.querySelectorAll(".gal-img").forEach(function(div) {
+    div.addEventListener("click", function() { lbOpen(appPhotos, parseInt(this.dataset.idx)); });
+    var img = div.querySelector("img");
+    if (img) {
+      img.addEventListener("error", function() { div.style.display = "none"; });
+    }
+  });
 }
 
 function openAdminLogin() { document.getElementById("admin-pwd").value = ""; document.getElementById("login-err").style.display = "none"; document.getElementById("login-ov").classList.add("open"); document.body.style.overflow = "hidden"; }
