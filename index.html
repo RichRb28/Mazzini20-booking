@@ -389,25 +389,25 @@ function renderRooms() {
     var name = it ? r.name : r.nameEN;
     var desc = it ? r.desc : r.descEN;
     var tags = it ? r.tags : r.tagsEN;
-    var placeholder = "<div class="room-placeholder"><div>📷</div><p>" + (it ? "Foto in arrivo" : "Photos coming soon") + "</p></div>";
-    var photoHtml = photos.length > 0 ? "<img src="" + photos[0] + "" alt="" + name + "" class="room-cover-img">" + placeholder : placeholder;
-    var photoClick = photos.length > 0 ? " onclick="lbOpen(roomPhotos[String(" + r.id + ")],0)" style="cursor:zoom-in"" : "";
+    var placeholder = "<div class='room-placeholder'><div>📷</div><p>" + (it ? "Foto in arrivo" : "Photos coming soon") + "</p></div>";
+    var photoHtml = photos.length > 0 ? "<img src='" + photos[0] + "' alt='" + name + "' class='room-cover-img'>" + placeholder : placeholder;
+    var photoClick = photos.length > 0 ? " onclick='lbOpen(roomPhotos[String(" + r.id + ")],0)' style='cursor:zoom-in'" : "";
     var tagsHtml = "";
-    for (var j = 0; j < tags.length; j++) tagsHtml += "<span class="tag">" + tags[j] + "</span>";
-    tagsHtml += "<span class="tag">All-inclusive</span>";
+    for (var j = 0; j < tags.length; j++) tagsHtml += "<span class='tag'>" + tags[j] + "</span>";
+    tagsHtml += "<span class='tag'>All-inclusive</span>";
     var b1 = it ? "Candidati per questa camera" : "Apply for this room";
     var b2 = it ? "Prenota visita" : "Book a visit";
     var bDis = it ? "Non disponibile" : "Not available";
     var from = it ? "All-inclusive &middot; Disponibile da met&agrave; settembre 2026" : "All-inclusive &middot; Available from mid-September 2026";
     var priceLabel = it ? "Prezzo su richiesta" : "Price on request";
     var btns = avail
-      ? "<button class="rbtn rbtn-pri" onclick="openCand(" + r.id + ")">" + b1 + "</button><button class="rbtn rbtn-sec" onclick="openVisit(" + r.id + ")">" + b2 + "</button>"
-      : "<button class="rbtn rbtn-dis" disabled>" + bDis + "</button>";
-    html += "<div class="room-card">";
-    html += "<div class="room-img"" + photoClick + ">" + photoHtml + "<span class="avail-badge " + (avail ? "avail" : "not-avail") + "">" + (avail ? (it ? "Disponibile" : "Available") : (it ? "Occupata" : "Occupied")) + "</span></div>";
-    html += "<div class="room-body"><div class="room-name">" + name + "</div><div class="room-desc">" + r.mq + " mq &middot; " + desc + "</div>";
-    html += "<div class="room-price-label">" + priceLabel + "</div><div class="room-from">" + from + "</div>";
-    html += "<div class="tags">" + tagsHtml + "</div>" + btns + "</div></div>";
+      ? "<button class='rbtn rbtn-pri' onclick='openCand(" + r.id + ")'>" + b1 + "</button><button class='rbtn rbtn-sec' onclick='openVisit(" + r.id + ")'>" + b2 + "</button>"
+      : "<button class='rbtn rbtn-dis' disabled>" + bDis + "</button>";
+    html += "<div class='room-card'>";
+    html += "<div class='room-img'" + photoClick + ">" + photoHtml + "<span class='avail-badge " + (avail ? "avail" : "not-avail") + "'>" + (avail ? (it ? "Disponibile" : "Available") : (it ? "Occupata" : "Occupied")) + "</span></div>";
+    html += "<div class='room-body'><div class='room-name'>" + name + "</div><div class='room-desc'>" + r.mq + " mq &middot; " + desc + "</div>";
+    html += "<div class='room-price-label'>" + priceLabel + "</div><div class='room-from'>" + from + "</div>";
+    html += "<div class='tags'>" + tagsHtml + "</div>" + btns + "</div></div>";
   }
   grid.innerHTML = html;
 }
@@ -516,19 +516,19 @@ function showTab(tab, btn) {
 
 function renderAdmin() {
   var cl = document.getElementById("cand-list");
-  if (candidature.length === 0) { cl.innerHTML = "<div class="empty">Nessuna candidatura ricevuta</div>"; }
+  if (candidature.length === 0) { cl.innerHTML = "<div class='empty'>Nessuna candidatura ricevuta</div>"; }
   else {
     var html = "";
     for (var i = 0; i < candidature.length; i++) {
       var c = candidature[i];
       var bc = c.status === "approved" ? "b-approved" : c.status === "rejected" ? "b-rejected" : "b-pending";
       var bl = c.status === "approved" ? "Approvato" : c.status === "rejected" ? "Rifiutato" : "In attesa";
-      html += "<div class="cand-item"><div class="cand-head"><div class="cand-name">" + c.nome + "</div><span class="badge " + bc + "">" + bl + "</span></div>";
-      html += "<div class="cand-info">Camera: " + c.camera + "<br>Periodo: " + c.din + " - " + c.dout + "<br>Tipo: " + c.tipo + (c.univ ? " - " + c.univ : "") + (c.azienda ? " - " + c.azienda : "") + "<br>Email: " + c.email + " - Tel: " + c.tel + "<br>Note: " + c.bio + "<br>" + c.ts + "</div>";
-      html += "<div class="cand-acts">";
-      html += "<button class="act-approve" data-idx="" + i + "">Approva</button>";
-      html += "<button class="act-reject" data-idx="" + i + "">Rifiuta</button>";
-      html += "<button class="act-contact" data-email="" + c.email + "">Contatta</button>";
+      html += "<div class='cand-item'><div class='cand-head'><div class='cand-name'>" + c.nome + "</div><span class='badge ' + bc + "">" + bl + "</span></div>";
+      html += "<div class='cand-info'>Camera: " + c.camera + "<br>Periodo: " + c.din + " - " + c.dout + "<br>Tipo: " + c.tipo + (c.univ ? " - " + c.univ : "") + (c.azienda ? " - " + c.azienda : "") + "<br>Email: " + c.email + " - Tel: " + c.tel + "<br>Note: " + c.bio + "<br>" + c.ts + "</div>";
+      html += "<div class='cand-acts'>";
+      html += "<button class='act-approve' data-idx="" + i + "">Approva</button>";
+      html += "<button class='act-reject' data-idx="" + i + "">Rifiuta</button>";
+      html += "<button class='act-contact' data-email="" + c.email + "">Contatta</button>";
       html += "</div></div>";
     }
     cl.innerHTML = html;
@@ -537,18 +537,18 @@ function renderAdmin() {
     cl.querySelectorAll(".act-contact").forEach(function(b) { b.addEventListener("click", function() { location.href = "mailto:" + this.dataset.email; }); });
   }
   var vl = document.getElementById("visit-list");
-  if (visite.length === 0) { vl.innerHTML = "<div class="empty">Nessuna visita richiesta</div>"; }
+  if (visite.length === 0) { vl.innerHTML = "<div class='empty'>Nessuna visita richiesta</div>"; }
   else {
     var vhtml = "";
     for (var i = 0; i < visite.length; i++) {
       var v = visite[i];
       var vb = v.status === "confirmed" ? "b-confirmed" : "b-pending";
       var vl2 = v.status === "confirmed" ? "Confermata" : "Da confermare";
-      vhtml += "<div class="cand-item"><div class="cand-head"><div class="cand-name">" + v.nome + "</div><span class="badge " + vb + "">" + vl2 + "</span></div>";
-      vhtml += "<div class="cand-info">Camera: " + v.camera + "<br>Giorno: " + v.day + " - " + v.time + "<br>Email: " + v.email + " - Tel: " + v.tel + (v.note ? "<br>Note: " + v.note : "") + "<br>" + v.ts + "</div>";
-      vhtml += "<div class="cand-acts">";
-      vhtml += "<button class="act-approve" data-idx="" + i + "">Conferma</button>";
-      vhtml += "<button class="act-contact" data-email="" + v.email + "">Contatta</button>";
+      vhtml += "<div class='cand-item'><div class='cand-head'><div class='cand-name'>" + v.nome + "</div><span class='badge ' + vb + "">" + vl2 + "</span></div>";
+      vhtml += "<div class='cand-info'>Camera: " + v.camera + "<br>Giorno: " + v.day + " - " + v.time + "<br>Email: " + v.email + " - Tel: " + v.tel + (v.note ? "<br>Note: " + v.note : "") + "<br>" + v.ts + "</div>";
+      vhtml += "<div class='cand-acts'>";
+      vhtml += "<button class='act-approve' data-idx="" + i + "">Conferma</button>";
+      vhtml += "<button class='act-contact' data-email="" + v.email + "">Contatta</button>";
       vhtml += "</div></div>";
     }
     vl.innerHTML = vhtml;
@@ -559,8 +559,8 @@ function renderAdmin() {
   var ahtml = "";
   for (var i = 0; i < ROOMS.length; i++) {
     var r = ROOMS[i];
-    ahtml += "<div class="rtoggle"><div class="rtoggle-info">" + r.name + "<small>" + r.mq + " mq</small></div>";
-    ahtml += "<div class="toggle " + (availability[String(r.id)] ? "on" : "") + "" data-id="" + r.id + ""></div></div>";
+    ahtml += "<div class='rtoggle'><div class='rtoggle-info'>" + r.name + "<small>" + r.mq + " mq</small></div>";
+    ahtml += "<div class='toggle ' + (availability[String(r.id)] ? "on" : "") + "" data-id="" + r.id + ""></div></div>";
   }
   al.innerHTML = ahtml;
   al.querySelectorAll(".toggle").forEach(function(el) { el.addEventListener("click", function() { toggleAvail(this.dataset.id, this); }); });
