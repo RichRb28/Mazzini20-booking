@@ -526,9 +526,9 @@ function renderAdmin() {
       html += "<div class='cand-item'><div class='cand-head'><div class='cand-name'>" + c.nome + "</div><span class='badge ' + bc + "">" + bl + "</span></div>";
       html += "<div class='cand-info'>Camera: " + c.camera + "<br>Periodo: " + c.din + " - " + c.dout + "<br>Tipo: " + c.tipo + (c.univ ? " - " + c.univ : "") + (c.azienda ? " - " + c.azienda : "") + "<br>Email: " + c.email + " - Tel: " + c.tel + "<br>Note: " + c.bio + "<br>" + c.ts + "</div>";
       html += "<div class='cand-acts'>";
-      html += "<button class='act-approve' data-idx="" + i + "">Approva</button>";
-      html += "<button class='act-reject' data-idx="" + i + "">Rifiuta</button>";
-      html += "<button class='act-contact' data-email="" + c.email + "">Contatta</button>";
+      html += "<button class='act-approve' data-idx='" + i + "'>Approva</button>";
+      html += "<button class='act-reject' data-idx='" + i + "'>Rifiuta</button>";
+      html += "<button class='act-contact' data-email='" + c.email + "'>Contatta</button>";
       html += "</div></div>";
     }
     cl.innerHTML = html;
@@ -547,8 +547,8 @@ function renderAdmin() {
       vhtml += "<div class='cand-item'><div class='cand-head'><div class='cand-name'>" + v.nome + "</div><span class='badge ' + vb + "">" + vl2 + "</span></div>";
       vhtml += "<div class='cand-info'>Camera: " + v.camera + "<br>Giorno: " + v.day + " - " + v.time + "<br>Email: " + v.email + " - Tel: " + v.tel + (v.note ? "<br>Note: " + v.note : "") + "<br>" + v.ts + "</div>";
       vhtml += "<div class='cand-acts'>";
-      vhtml += "<button class='act-approve' data-idx="" + i + "">Conferma</button>";
-      vhtml += "<button class='act-contact' data-email="" + v.email + "">Contatta</button>";
+      vhtml += "<button class='act-approve' data-idx='" + i + "'>Conferma</button>";
+      vhtml += "<button class='act-contact' data-email='" + v.email + "'>Contatta</button>";
       vhtml += "</div></div>";
     }
     vl.innerHTML = vhtml;
@@ -560,7 +560,7 @@ function renderAdmin() {
   for (var i = 0; i < ROOMS.length; i++) {
     var r = ROOMS[i];
     ahtml += "<div class='rtoggle'><div class='rtoggle-info'>" + r.name + "<small>" + r.mq + " mq</small></div>";
-    ahtml += "<div class='toggle ' + (availability[String(r.id)] ? "on" : "") + "" data-id="" + r.id + ""></div></div>";
+    ahtml += "<div class='toggle " + (availability[String(r.id)] ? "on" : "") + "' data-id='" + r.id + "'></div></div>";
   }
   al.innerHTML = ahtml;
   al.querySelectorAll(".toggle").forEach(function(el) { el.addEventListener("click", function() { toggleAvail(this.dataset.id, this); }); });
