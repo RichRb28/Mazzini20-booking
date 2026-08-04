@@ -155,7 +155,7 @@ footer strong{color:rgba(255,255,255,0.7)}
     <div class="hero-stats">
       <div><div class="stat-num">4</div><div class="stat-label" id="sl-camere">Camere</div></div>
       <div><div class="stat-num">P.2</div><div class="stat-label" id="sl-asc">Ascensore</div></div>
-      <div><div class="stat-num">All-in</div><div class="stat-label" id="sl-spese">Spese incluse</div></div>
+      <div><div class="stat-num">da €750</div><div class="stat-label" id="sl-spese">Tutto incluso</div></div>
     </div>
   </div>
 </div>
@@ -169,7 +169,7 @@ footer strong{color:rgba(255,255,255,0.7)}
     <div class="feat"><div class="feat-icon">🪵</div><h4 id="f2t">Parquet in legno</h4><p id="f2d">Parquet nelle camere, microcemento nelle parti comuni</p></div>
     <div class="feat"><div class="feat-icon">🚿</div><h4 id="f3t">Bagno ristrutturato</h4><p id="f3d">Doccia, lavello, WC, bidet, acqua calda da caldaia a gas nuova</p></div>
     <div class="feat"><div class="feat-icon">👕</div><h4 id="f4t">Lavatrice</h4><p id="f4d">Lavatrice condivisa</p></div>
-    <div class="feat"><div class="feat-icon">📶</div><h4 id="f5t">Internet fibra</h4><p id="f5d">Connessione fibra inclusa nel canone</p></div>
+    <div class="feat"><div class="feat-icon">📶</div><h4 id="f5t">Internet veloce</h4><p id="f5d">Connessione internet inclusa nel canone</p></div>
     <div class="feat"><div class="feat-icon">🍳</div><h4 id="f6t">Cucina abitabile</h4><p id="f6d">Cucina con tavolo, 4 sedie, frigorifero e fornelli a gas</p></div>
     <div class="feat"><div class="feat-icon">🪟</div><h4 id="f7t">Infissi doppio vetro</h4><p id="f7d">Serramenti moderni per isolamento termico e acustico</p></div>
     <div class="feat"><div class="feat-icon">🚲</div><h4 id="f8t">Posteggio bici</h4><p id="f8d">Cortile interno condominiale per il parcheggio biciclette</p></div>
@@ -180,7 +180,7 @@ footer strong{color:rgba(255,255,255,0.7)}
 <div class="section">
   <div class="sec-label" id="lbl-cam">Disponibilit&agrave; camere</div>
   <div class="sec-heading" id="h-cam">Scegli la tua camera</div>
-  <div class="sec-sub" id="sub-cam">Camere disponibili da metà settembre 2026. Canoni all-inclusive — nessun costo aggiuntivo.</div>
+  <div class="sec-sub" id="sub-cam">Camere disponibili da metà settembre 2026. Canone all-inclusive a partire da €750/mese per contratti inferiori all'anno.</div>
   <div class="rooms" id="rooms-grid"></div>
 </div>
 
@@ -414,7 +414,7 @@ function renderRooms() {
     html += '<div class="room-card">';
     html += '<div class="room-img"'+photoClick+'>'+photoHtml+'<span class="avail-badge '+(avail?'avail':'not-avail')+'">'+(avail?(it?'Disponibile':'Available'):(it?'Occupata':'Occupied'))+'</span></div>';
     html += '<div class="room-body"><div class="room-name">'+name+'</div><div class="room-desc">'+r.mq+' mq &middot; '+desc+'</div>';
-    html += '<div class="room-price">&euro;'+r.price+'<span>/mese</span></div><div class="room-from">'+from+'</div>';
+    html += '<div class="room-price" style="font-size:13px;font-weight:600;color:var(--muted)">'+( it ? 'Prezzo su richiesta' : 'Price on request')+'</div><div class="room-from">'+from+'</div>';
     html += '<div class="tags">'+tagsHtml+'</div>'+btns+'</div></div>';
   }
   grid.innerHTML = html;
@@ -625,17 +625,17 @@ function switchLang(){
   document.querySelector('.hero p').textContent=it?'Appartamento completamente ristrutturato nel 2026, arredato nuovo, tutto incluso. Per studenti e lavoratori.':'Fully renovated apartment in 2026, brand new furniture, all-inclusive. For students and workers.';
   document.getElementById('sl-camere').textContent=it?'Camere':'Rooms';
   document.getElementById('sl-asc').textContent=it?'Ascensore':'Elevator';
-  document.getElementById('sl-spese').textContent=it?'Spese incluse':'Bills included';
+  document.getElementById('sl-spese').textContent=it?'Tutto incluso':'All inclusive';
   document.getElementById('lbl-app').textContent=it?"L'appartamento":'The apartment';
   document.getElementById('h-app').textContent=it?'Ristrutturato, arredato nuovo, tutto incluso':'Renovated, brand new furniture, all-inclusive';
   document.getElementById('sub-app').textContent=it?'Via Mazzini 20, secondo piano con ascensore, a pochi passi da Piazza Bodoni nel cuore di Torino.':'Via Mazzini 20, second floor with elevator, steps from Piazza Bodoni in the heart of Turin.';
   document.getElementById('lbl-cam').textContent=it?'Disponibilità camere':'Room availability';
   document.getElementById('h-cam').textContent=it?'Scegli la tua camera':'Choose your room';
-  document.getElementById('sub-cam').textContent=it?'Camere disponibili da metà settembre 2026. Canoni all-inclusive — nessun costo aggiuntivo.':'Rooms available from mid-September 2026. All-inclusive rates — no extra costs.';
+  document.getElementById('sub-cam').textContent=it?'Camere disponibili da metà settembre 2026. Canone all-inclusive a partire da €750/mese per contratti inferiori all'anno.':'Rooms available from mid-September 2026. All-inclusive rent starting from €750/month for contracts under one year.';
   var fTIT=['Arredi nuovi 2026','Parquet in legno','Bagno ristrutturato','Lavatrice','Internet fibra','Smart TV in cucina','Infissi doppio vetro','Posteggio bici','Portale inquilini'];
-  var fTEN=['New furniture 2026','Hardwood floors','Renovated bathroom','Washing machine','Fiber internet','Smart TV in kitchen','Double-glazed windows','Bike parking','Tenant portal'];
+  var fTEN=['New furniture 2026','Hardwood floors','Renovated bathroom','Washing machine','Fast internet','Smart TV in kitchen','Double-glazed windows','Bike parking','Tenant portal'];
   var fDIT=['Letto 1.5 piazze, scrivania ergonomica, armadio, libreria, luci dedicate','Parquet nelle camere, microcemento nelle parti comuni','Doccia, lavello, WC, bidet, acqua calda da caldaia a gas nuova','Lavatrice condivisa','Connessione fibra inclusa nel canone','Cucina abitabile con Smart TV, macchina del caffè, microonde','Serramenti moderni per isolamento termico e acustico','Cortile interno condominiale per il parcheggio biciclette','App dedicata per guasti, servizi extra, rinnovi e assistenza h24'];
-  var fDEN=['Single bed, ergonomic desk, wardrobe, bookcase, dedicated lighting','Hardwood in bedrooms, microcement in common areas','Shower, sink, WC, bidet, hot water from new gas boiler','Shared washing machine','High-speed fiber included in rent','Eat-in kitchen with table, 4 chairs, fridge and gas stove','Modern frames for thermal and acoustic insulation','Building courtyard for bicycle parking','Dedicated app for maintenance, extra services and 24/7 support'];
+  var fDEN=['Single bed, ergonomic desk, wardrobe, bookcase, dedicated lighting','Hardwood in bedrooms, microcement in common areas','Shower, sink, WC, bidet, hot water from new gas boiler','Shared washing machine','High-speed internet included in rent','Eat-in kitchen with table, 4 chairs, fridge and gas stove','Modern frames for thermal and acoustic insulation','Building courtyard for bicycle parking','Dedicated app for maintenance, extra services and 24/7 support'];
   for(var i=1;i<=9;i++){
     var el=document.getElementById('f'+i+'t');
     var el2=document.getElementById('f'+i+'d');
