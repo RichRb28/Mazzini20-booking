@@ -135,6 +135,7 @@ footer strong{color:rgba(255,255,255,0.7)}
   <div class="brand">Mazzini <em>20</em></div>
   <div style="display:flex;align-items:center;gap:12px">
     <button class="nav-link" id="nav-app">Appartamento</button>
+    <button class="nav-link" id="nav-contatti">Contatti</button>
     <button class="nav-link" id="lang-btn" style="border:1px solid rgba(255,255,255,0.25);padding:4px 10px;border-radius:12px;font-size:11px">EN</button>
   </div>
   <button class="nav-cta" id="admin-btn">Admin</button>
@@ -166,6 +167,7 @@ footer strong{color:rgba(255,255,255,0.7)}
     <div class="feat"><div class="feat-icon">&#x1FAA1;</div><h4 id="f7t">Infissi doppio vetro</h4><p id="f7d">Serramenti moderni per isolamento termico e acustico</p></div>
     <div class="feat"><div class="feat-icon">&#x1F6B2;</div><h4 id="f8t">Posteggio bici</h4><p id="f8d">Cortile interno per il parcheggio biciclette</p></div>
     <div class="feat"><div class="feat-icon">&#x1F511;</div><h4 id="f9t">Chiave personale</h4><p id="f9d">Ogni camera ha la propria chiave per la massima privacy</p></div>
+    <div class="feat"><div class="feat-icon">&#x1F6BF;</div><h4 id="f10t">Asciugamani inclusi</h4><p id="f10d">Doppio set di asciugamani incluso per ogni camera</p></div>
   </div>
 </div>
 <div class="section">
@@ -177,6 +179,31 @@ footer strong{color:rgba(255,255,255,0.7)}
 <footer>
   <p id="footer-txt"><strong>Via Mazzini 20 &middot; Torino &middot; Piano 2</strong><br>Zona Piazza Bodoni &middot; Centro storico<br>Per informazioni prenota direttamente online</p>
 </footer>
+<!-- CONTATTI -->
+<div class="overlay" id="contatti-ov">
+  <div class="modal" style="max-width:380px">
+    <button class="close-x" id="close-contatti">&#215;</button>
+    <h3>Contatti</h3>
+    <div class="modal-sub">Per informazioni sulle camere o per candidarsi</div>
+    <div style="margin-top:16px;display:flex;flex-direction:column;gap:14px">
+      <a href="mailto:riccardoraballo@yahoo.it" style="display:flex;align-items:center;gap:12px;text-decoration:none;background:#f7f8ff;border-radius:10px;padding:14px">
+        <span style="font-size:24px">&#x2709;&#xFE0F;</span>
+        <div>
+          <div style="font-size:11px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:1px">Email</div>
+          <div style="font-size:13px;color:#1a56db;font-weight:500">riccardoraballo@yahoo.it</div>
+        </div>
+      </a>
+      <a href="tel:+393315668588" style="display:flex;align-items:center;gap:12px;text-decoration:none;background:#f7f8ff;border-radius:10px;padding:14px">
+        <span style="font-size:24px">&#x1F4F1;</span>
+        <div>
+          <div style="font-size:11px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:1px">Cellulare</div>
+          <div style="font-size:13px;color:#1a56db;font-weight:500">+39 331 566 8588</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
 <!-- GALLERY -->
 <div class="overlay" id="gallery-ov">
   <div class="modal wide">
@@ -390,6 +417,8 @@ window.addEventListener('DOMContentLoaded', function() {
 
   // Nav
   document.getElementById('nav-app').addEventListener('click', openGallery);
+  document.getElementById('nav-contatti').addEventListener('click', function() { openOverlay('contatti-ov'); });
+  document.getElementById('close-contatti').addEventListener('click', function() { closeOverlay('contatti-ov'); });
   document.getElementById('lang-btn').addEventListener('click', switchLang);
   document.getElementById('admin-btn').addEventListener('click', openAdminLogin);
 
@@ -785,11 +814,11 @@ function switchLang() {
   document.getElementById('lbl-cam').textContent = it ? 'Disponibilita camere' : 'Room availability';
   document.getElementById('h-cam').textContent = it ? 'Scegli la tua camera' : 'Choose your room';
   document.getElementById('sub-cam').textContent = it ? 'Camere disponibili da meta settembre 2026. Canone all-inclusive a partire da 750/mese per contratti inferiori a 12 mesi.' : 'Rooms available from mid-September 2026. All-inclusive rent starting from 750/month for contracts under 12 months.';
-  var fTIT = ['Arredi nuovi 2026','Parquet in legno','2 bagni ristrutturati','Lavatrice','Internet veloce','Cucina abitabile con balcone','Infissi doppio vetro','Posteggio bici','Chiave personale'];
-  var fTEN = ['New furniture 2026','Hardwood floors','2 renovated bathrooms','Washing machine','Fast internet','Eat-in kitchen with balcony','Double-glazed windows','Bike parking','Personal key'];
-  var fDIT = ['Ogni camera arredata con cura e dotata di biancheria completa','Parquet in legno nelle camere','Due bagni completi con box doccia, WC, bidet e lavabo','Lavatrice condivisa in cucina','Connessione internet inclusa nel canone','Cucina completa con forno, frigo, tavolo, sedie e servizio completo','Serramenti moderni per isolamento termico e acustico','Cortile interno per il parcheggio biciclette','Ogni camera ha la propria chiave per la massima privacy'];
-  var fDEN = ['Each room carefully furnished and equipped with full linen','Hardwood floors in all bedrooms','Two fully renovated bathrooms with shower box','Shared washing machine in kitchen','Internet included in rent','Full kitchen with balcony, oven, fridge, table, chairs and accessories','Modern frames for thermal and acoustic insulation','Building courtyard for bicycle parking','Each room has its own key for maximum privacy'];
-  for (var i = 1; i <= 9; i++) {
+  var fTIT = ['Arredi nuovi 2026','Parquet in legno','2 bagni ristrutturati','Lavatrice','Internet veloce','Cucina abitabile con balcone','Infissi doppio vetro','Posteggio bici','Chiave personale','Asciugamani inclusi'];
+  var fTEN = ['New furniture 2026','Hardwood floors','2 renovated bathrooms','Washing machine','Fast internet','Eat-in kitchen with balcony','Double-glazed windows','Bike parking','Personal key','Towels included'];
+  var fDIT = ['Ogni camera arredata con cura e dotata di biancheria completa','Parquet in legno nelle camere','Due bagni completi con box doccia, WC, bidet e lavabo','Lavatrice condivisa in cucina','Connessione internet inclusa nel canone','Cucina completa con forno, frigo, tavolo, sedie e servizio completo','Serramenti moderni per isolamento termico e acustico','Cortile interno per il parcheggio biciclette','Ogni camera ha la propria chiave per la massima privacy','Doppio set di asciugamani incluso per ogni camera'];
+  var fDEN = ['Each room carefully furnished and equipped with full linen','Hardwood floors in all bedrooms','Two fully renovated bathrooms with shower box','Shared washing machine in kitchen','Internet included in rent','Full kitchen with balcony, oven, fridge, table, chairs and accessories','Modern frames for thermal and acoustic insulation','Building courtyard for bicycle parking','Each room has its own key for maximum privacy','Double set of towels included per room'];
+  for (var i = 1; i <= 10; i++) {
     var h = document.getElementById('f'+i+'t');
     var p = document.getElementById('f'+i+'d');
     if (h) h.textContent = it ? fTIT[i-1] : fTEN[i-1];
