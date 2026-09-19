@@ -9,53 +9,54 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--blue:#1a56db;--dark:#1a1a2e;--light:#f7f8ff;--border:#eee;--muted:#777}
-body{font-family:'DM Sans',-apple-system,sans-serif;background:#f5f4f0;color:#333}
-nav{background:var(--dark);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.brand{font-family:'Playfair Display',serif;color:#fff;font-size:15px;font-weight:600;letter-spacing:0.3px;display:flex;align-items:baseline;gap:4px}
-.brand em{color:#4f9cf9;font-style:italic;font-size:26px}
+:root{--blue:#4a5c4e;--accent:#8b5e3c;--dark:#1a1a1a;--light:#f0ede8;--border:#e0d8cf;--muted:#7a6f65;--bg:#f7f5f0}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--dark)}
+nav{background:#3a4a3e;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:8px}
+.brand{font-family:'Playfair Display',serif;color:#fff;font-size:22px;font-weight:600;letter-spacing:0.3px;display:flex;align-items:baseline;gap:4px}
+.brand em{color:#c8a882;font-style:italic;font-size:38px}
 .nav-link{color:rgba(255,255,255,0.65);font-size:12px;cursor:pointer;border:none;background:none;font-family:inherit}
 .nav-link:hover{color:#fff}
-.nav-cta{background:#4f9cf9;color:#fff;border:none;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
-.hero{background:url('piazza_bodoni.jpg') top center/cover no-repeat;padding:90px 24px 80px;text-align:center;position:relative}
-.hero-overlay{position:absolute;inset:0;background:rgba(15,15,35,0.40)}
+.nav-cta{background:#8b5e3c;color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.hero{background:url('piazza_bodoni.jpg') top center/cover no-repeat;padding:36px 16px 32px;text-align:center;position:relative}
+.hero-overlay{position:absolute;inset:0;background:rgba(30,45,35,0.55)}
 .hero-content{position:relative;z-index:1}
-.hero-tag{display:inline-block;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:16px}
-.hero h1{font-size:34px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:12px;letter-spacing:-0.5px}
-.hero h1 em{color:#4f9cf9;font-style:normal}
-.hero p{font-size:14px;color:rgba(255,255,255,0.75);max-width:520px;margin:0 auto 28px;line-height:1.7}
-.hero-stats{display:flex;justify-content:center;gap:32px}
-.stat-num{font-size:22px;font-weight:800;color:#fff}
+.hero-tag{display:inline-block;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:3px 12px;border-radius:20px;margin-bottom:10px}
+.hero h1{font-size:24px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:8px;letter-spacing:-0.5px}
+.hero h1 em{color:#c8a882;font-style:normal}
+.hero p{font-size:12px;color:rgba(255,255,255,0.75);max-width:520px;margin:0 auto 14px;line-height:1.5}
+.hero-stats{display:flex;justify-content:center;gap:24px;margin-top:4px}
+.stat-num{font-size:20px;font-weight:800;color:#f5ede0}
 .stat-label{font-size:10px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px}
-.section{padding:48px 24px;max-width:860px;margin:0 auto}
-.sec-label{font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
-.sec-heading{font-size:22px;font-weight:700;color:var(--dark);margin-bottom:8px}
-.sec-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
-.features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
-.feat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.feat-icon{font-size:36px;margin-bottom:8px}
-.feat h4{font-size:11px;font-weight:600;color:var(--dark);margin-bottom:3px}
-.feat p{font-size:10px;color:var(--muted);line-height:1.4}
-.rooms{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.section{padding:16px 14px 12px;max-width:860px;margin:0 auto}
+.sec-label{font-size:10px;font-weight:700;color:#8b5e3c;text-transform:uppercase;letter-spacing:2px;margin-bottom:2px}
+.sec-heading{font-size:18px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.sec-sub{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+.features{display:grid;grid-template-columns:repeat(3,1fr)!important;gap:5px;margin-bottom:10px}
+.feat{background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 4px 7px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;transition:box-shadow 0.2s}
+.feat:hover{box-shadow:0 2px 12px rgba(74,92,78,0.10);border-color:#b0c0b4}
+.feat-icon{font-size:20px;width:36px;height:36px;background:#e8ede9;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.feat h4{font-size:9px;font-weight:700;color:var(--dark);margin-bottom:0;line-height:1.3}
+.feat p{display:none}
+.rooms{display:grid;grid-template-columns:1fr;gap:10px}
 .room-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:box-shadow 0.2s}
 .room-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.08)}
-.room-img{height:160px;background:linear-gradient(135deg,#e8ecff,#f0f4ff);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.room-img{height:160px;background:linear-gradient(135deg,#e8ede9,#f0ede8);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .room-img img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}
 .room-placeholder{text-align:center;color:#aaa;z-index:1}
 .room-placeholder div{font-size:32px;margin-bottom:6px}
 .room-placeholder p{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:1px}
 .avail-badge{position:absolute;top:10px;right:10px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;z-index:2}
-.avail{background:#d1fae5;color:#065f46}
+.avail{background:#ddeede;color:#2d4a32}
 .not-avail{background:#fee2e2;color:#991b1b}
-.room-body{padding:16px}
-.room-name{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:4px}
-.room-desc{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.5}
-.room-price-label{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:4px}
-.room-from{font-size:10px;color:var(--muted);margin-bottom:12px}
-.tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
-.tag{background:var(--light);color:var(--blue);font-size:9.5px;font-weight:500;padding:3px 8px;border-radius:20px;border:1px solid #e0e8ff}
-.rbtn{width:100%;padding:10px;border-radius:9px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px}
-.rbtn-pri{background:var(--blue);color:#fff}
+.room-body{padding:10px}
+.room-name{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:2px}
+.room-desc{font-size:10px;color:var(--muted);margin-bottom:6px;line-height:1.4}
+.room-price-label{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:2px}
+.room-from{font-size:9px;color:var(--muted);margin-bottom:6px}
+.tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
+.tag{background:#e8ede9;color:#3a4a3e;font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;border:1px solid #c0cfc3}
+.rbtn{width:100%;padding:8px;border-radius:8px;border:none;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:3px}
+.rbtn-pri{background:#4a5c4e;color:#fff}
 .rbtn-sec{background:#f5f5f5;color:#666}
 .rbtn-dis{background:#f5f5f5;color:#bbb;cursor:not-allowed}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;overflow-y:auto;padding:20px}
@@ -72,10 +73,10 @@ nav{background:var(--dark);padding:14px 24px;display:flex;align-items:center;jus
 .fgroup input,.fgroup select,.fgroup textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:9px;font-size:12px;color:var(--dark);font-family:inherit;background:#fafaf8}
 .fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{outline:none;border-color:var(--blue)}
 .fgroup textarea{resize:none}
-.info-box{background:#e8f0fe;border:1px solid #c0d4fb;border-radius:9px;padding:10px;font-size:11px;color:var(--blue);margin-bottom:14px;line-height:1.6}
+.info-box{background:#e8ede9;border:1px solid #b0c0b4;border-radius:9px;padding:10px;font-size:11px;color:#3a4a3e;margin-bottom:14px;line-height:1.6}
 .btn-row{display:flex;gap:10px;margin-top:20px}
 .btn-cancel{padding:10px 16px;border:1px solid var(--border);background:#fff;color:#666;border-radius:9px;cursor:pointer;font-size:12px;font-family:inherit}
-.btn-submit{flex:1;padding:10px;background:var(--blue);color:#fff;border:none;border-radius:9px;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit}
+.btn-submit{flex:1;padding:10px;background:#4a5c4e;color:#fff;border:none;border-radius:9px;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit}
 .gal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
 .gal-img{border-radius:10px;overflow:hidden;height:160px;cursor:zoom-in}
 .gal-img img{width:100%;height:100%;object-fit:cover}
@@ -83,7 +84,7 @@ nav{background:var(--dark);padding:14px 24px;display:flex;align-items:center;jus
 .admin-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .atabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
 .atab{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:#fff;font-size:12px;cursor:pointer;color:var(--muted);font-family:inherit}
-.atab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.atab.active{background:#4a5c4e;color:#fff;border-color:#4a5c4e}
 .cand-item{background:#fafaf8;border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px}
 .cand-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .cand-name{font-size:14px;font-weight:600;color:var(--dark)}
@@ -102,7 +103,7 @@ nav{background:var(--dark);padding:14px 24px;display:flex;align-items:center;jus
 .rtoggle-info{font-size:13px;font-weight:600;color:var(--dark)}
 .rtoggle-info small{font-size:11px;font-weight:400;color:var(--muted);display:block}
 .toggle{width:40px;height:22px;background:#ddd;border-radius:20px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0}
-.toggle.on{background:#4f9cf9}
+.toggle.on{background:#4a5c4e}
 .toggle::after{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left 0.2s}
 .toggle.on::after{left:21px}
 .login-modal{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:320px;margin:auto;position:relative}
@@ -113,7 +114,7 @@ nav{background:var(--dark);padding:14px 24px;display:flex;align-items:center;jus
 .success-icon{font-size:48px;margin-bottom:12px}
 .success-box h3{font-size:18px;font-weight:700;color:var(--dark);margin-bottom:8px}
 .success-box p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px}
-footer{background:var(--dark);padding:24px;text-align:center;margin-top:48px}
+footer{background:#3a4a3e;padding:16px;text-align:center;margin-top:20px}
 footer p{font-size:11px;color:rgba(255,255,255,0.35);line-height:1.8}
 footer strong{color:rgba(255,255,255,0.7)}
 .lb-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:600}
@@ -127,18 +128,18 @@ footer strong{color:rgba(255,255,255,0.7)}
 .lb-dots{display:flex;gap:6px}
 .lb-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.3);border:none;cursor:pointer}
 .lb-dot.on{background:#fff}
-@media(max-width:600px){.rooms,.features,.frow,.gal-grid{grid-template-columns:1fr}.hero h1{font-size:24px}.hero-stats{gap:20px}}
+@media(max-width:600px){.rooms,.frow,.gal-grid{grid-template-columns:1fr}.hero h1{font-size:24px}.hero-stats{gap:20px}}
+.section:first-of-type{padding-top:12px}
 </style>
 </head>
 <body>
 <nav>
   <div class="brand">Mazzini <em>20</em></div>
-  <div style="display:flex;align-items:center;gap:12px">
+  <div style="display:flex;align-items:center;gap:16px;flex:1;justify-content:flex-end">
     <button class="nav-link" id="nav-app">Appartamento</button>
     <button class="nav-link" id="nav-contatti">Contatti</button>
     <button class="nav-link" id="lang-btn" style="border:1px solid rgba(255,255,255,0.25);padding:4px 10px;border-radius:12px;font-size:11px">EN</button>
   </div>
-  <button class="nav-cta" id="admin-btn">Admin</button>
 </nav>
 <div class="hero">
   <div class="hero-overlay"></div>
@@ -159,21 +160,20 @@ footer strong{color:rgba(255,255,255,0.7)}
   <div class="sec-sub" id="sub-app">Via Mazzini 20, secondo piano con ascensore, a pochi passi da Piazza Bodoni nel cuore di Torino.</div>
   <div class="features">
     <div class="feat"><div class="feat-icon">&#x1F6CB;</div><h4 id="f1t">Arredi nuovi 2026</h4><p id="f1d">Ogni camera arredata con cura e dotata di biancheria completa</p></div>
-    <div class="feat"><div class="feat-icon">&#x1FAB5;</div><h4 id="f2t">Parquet in legno</h4><p id="f2d">Parquet in legno nelle camere</p></div>
     <div class="feat"><div class="feat-icon">&#x1F6BF;</div><h4 id="f3t">2 bagni ristrutturati</h4><p id="f3d">Due bagni completi con box doccia, WC, bidet e lavabo</p></div>
     <div class="feat"><div class="feat-icon">&#x1F455;</div><h4 id="f4t">Lavatrice</h4><p id="f4d">Lavatrice condivisa in cucina</p></div>
-    <div class="feat"><div class="feat-icon">&#x1F4F6;</div><h4 id="f5t">Internet veloce</h4><p id="f5d">Connessione internet inclusa nel canone</p></div>
+    <div class="feat"><div class="feat-icon">📶</div><h4 id="f5t">Internet veloce</h4><p id="f5d">Connessione internet inclusa nel canone</p></div>
     <div class="feat"><div class="feat-icon">&#x1F373;</div><h4 id="f6t">Cucina abitabile con balcone</h4><p id="f6d">Cucina completa con forno, frigo, tavolo, sedie e servizio di piatti e accessori</p></div>
-    <div class="feat"><div class="feat-icon">&#x1FAA1;</div><h4 id="f7t">Infissi doppio vetro</h4><p id="f7d">Serramenti moderni per isolamento termico e acustico</p></div>
+    <div class="feat"><div class="feat-icon">🪟</div><h4 id="f7t">Infissi doppio vetro</h4><p id="f7d">Serramenti moderni per isolamento termico e acustico</p></div>
     <div class="feat"><div class="feat-icon">&#x1F6B2;</div><h4 id="f8t">Posteggio bici</h4><p id="f8d">Cortile interno per il parcheggio biciclette</p></div>
     <div class="feat"><div class="feat-icon">&#x1F511;</div><h4 id="f9t">Chiave personale</h4><p id="f9d">Ogni camera ha la propria chiave per la massima privacy</p></div>
-    <div class="feat"><div class="feat-icon">&#x1F6BF;</div><h4 id="f10t">Asciugamani inclusi</h4><p id="f10d">Doppio set di asciugamani incluso per ogni camera</p></div>
+    <div class="feat"><div class="feat-icon">🛏️</div><h4 id="f10t">Biancheria inclusa</h4><p id="f10d">Doppio set di asciugamani incluso per ogni camera</p></div>
   </div>
 </div>
 <div class="section">
   <div class="sec-label" id="lbl-cam">Disponibilit&agrave; camere</div>
   <div class="sec-heading" id="h-cam">Scegli la tua camera</div>
-  <div class="sec-sub" id="sub-cam">Camere disponibili da met&agrave; settembre 2026. Canone all-inclusive a partire da &euro;750/mese per contratti inferiori a 12 mesi.</div>
+  <div class="sec-sub" id="sub-cam" style="margin-bottom:10px">Canone all-inclusive a partire da &euro;750/mese per contratti inferiori a 12 mesi.<br>Compila il form o contattaci al +39 331 566 8588.</div>
   <div class="rooms" id="rooms-grid"></div>
 </div>
 <footer>
@@ -227,41 +227,46 @@ footer strong{color:rgba(255,255,255,0.7)}
     </div>
     <div class="frow">
       <div class="fgroup"><label>Data di nascita *</label><input type="date" id="f-nascita"></div>
+      <div class="fgroup"><label>Luogo di nascita *</label><input type="text" id="f-luogo-nascita" placeholder="es. Torino"></div>
+    </div>
+    <div class="frow">
       <div class="fgroup"><label>Nazionalit&agrave; *</label><input type="text" id="f-naz" placeholder="es. Italiana"></div>
+      <div class="fgroup"><label>Codice Fiscale *</label><input type="text" id="f-cf" placeholder="es. RSSMRA90A01L219K" style="text-transform:uppercase"></div>
+    </div>
+    <div class="fgroup"><label>Residenza (via, citt&agrave;, CAP) *</label><input type="text" id="f-residenza" placeholder="es. Via Roma 1, Milano, 20100"></div>
+    <div class="frow">
+      <div class="fgroup"><label>Tipo documento *</label>
+        <select id="f-tipo-doc">
+          <option value="">Seleziona</option>
+          <option>Carta d&rsquo;identit&agrave;</option>
+          <option>Passaporto</option>
+          <option>Patente</option>
+          <option>Permesso di soggiorno</option>
+        </select>
+      </div>
+      <div class="fgroup"><label>Numero documento *</label><input type="text" id="f-num-doc" placeholder="es. AX1234567"></div>
+    </div>
+    <div class="frow">
+      <div class="fgroup"><label>Rilasciato da *</label><input type="text" id="f-doc-rilasciato" placeholder="es. Comune di Torino"></div>
+      <div class="fgroup"><label>Data rilascio *</label><input type="date" id="f-doc-data"></div>
     </div>
     <div class="frow">
       <div class="fgroup"><label>Email *</label><input type="email" id="f-email" placeholder="tua@email.com"></div>
       <div class="fgroup"><label>Telefono *</label><input type="tel" id="f-tel" placeholder="+39 ..."></div>
     </div>
-    <div class="sec-title">Situazione</div>
-    <div class="fgroup">
-      <label>Studente o lavoratore? *</label>
-      <select id="f-tipo">
-        <option value="">Seleziona</option>
-        <option value="studente">Studente universitario</option>
-        <option value="lavoratore">Lavoratore / Trasfertista</option>
-        <option value="altro">Altro</option>
-      </select>
+
+    <div class="sec-title">Garante (opzionale)</div>
+    <div class="frow">
+      <div class="fgroup"><label>Nome garante</label><input type="text" id="f-gar-nome" placeholder="Nome e cognome"></div>
+      <div class="fgroup"><label>CF garante</label><input type="text" id="f-gar-cf" placeholder="Codice fiscale" style="text-transform:uppercase"></div>
     </div>
-    <div id="s-fields">
-      <div class="frow">
-        <div class="fgroup"><label>Universit&agrave;</label><input type="text" id="f-univ" placeholder="es. Politecnico di Torino"></div>
-        <div class="fgroup"><label>Corso</label><input type="text" id="f-corso" placeholder="es. Ingegneria"></div>
-      </div>
-    </div>
-    <div id="l-fields" style="display:none">
-      <div class="frow">
-        <div class="fgroup"><label>Azienda</label><input type="text" id="f-azienda" placeholder="Nome azienda"></div>
-        <div class="fgroup"><label>Ruolo</label><input type="text" id="f-ruolo" placeholder="es. Ingegnere"></div>
-      </div>
-    </div>
+    <div class="fgroup"><label>Residenza garante</label><input type="text" id="f-gar-res" placeholder="Via, citt&agrave;, CAP"></div>
     <div class="sec-title">Periodo</div>
     <div class="frow">
       <div class="fgroup"><label>Data ingresso *</label><input type="date" id="f-din" min="2026-09-15"></div>
       <div class="fgroup"><label>Data uscita *</label><input type="date" id="f-dout" min="2026-10-15"></div>
     </div>
-    <div class="sec-title">Presentati</div>
-    <div class="fgroup"><label>Breve presentazione *</label><textarea id="f-bio" rows="3" placeholder="Chi sei e perche cerchi alloggio a Torino..."></textarea></div>
+
     <div class="btn-row">
       <button class="btn-cancel" id="cancel-cand">Annulla</button>
       <button class="btn-submit" id="submit-cand">Invia candidatura</button>
@@ -304,39 +309,6 @@ footer strong{color:rgba(255,255,255,0.7)}
     <div class="btn-row">
       <button class="btn-cancel" id="cancel-visit">Annulla</button>
       <button class="btn-submit" id="submit-visit">Prenota visita</button>
-    </div>
-  </div>
-</div>
-<!-- LOGIN -->
-<div class="overlay" id="login-ov" style="z-index:400">
-  <div class="login-modal">
-    <h3>Area admin</h3>
-    <p style="font-size:12px;color:var(--muted);margin:4px 0 16px">Accesso riservato al proprietario</p>
-    <div class="fgroup"><label>Password</label><input type="password" id="admin-pwd" placeholder="..."></div>
-    <div class="login-err" id="login-err">Password non corretta</div>
-    <div class="btn-row">
-      <button class="btn-cancel" id="cancel-login">Annulla</button>
-      <button class="btn-submit" id="do-login">Accedi</button>
-    </div>
-  </div>
-</div>
-<!-- ADMIN -->
-<div class="overlay" id="admin-ov">
-  <div class="admin-modal">
-    <div class="admin-head">
-      <h3>Dashboard Admin &mdash; Via Mazzini 20</h3>
-      <button class="close-x" style="position:static;font-size:22px" id="close-admin">&#215;</button>
-    </div>
-    <div class="atabs">
-      <button class="atab active" data-tab="candidature">Candidature</button>
-      <button class="atab" data-tab="visite">Visite</button>
-      <button class="atab" data-tab="disponibilita">Disponibilita</button>
-    </div>
-    <div id="t-candidature"><div id="cand-list"></div></div>
-    <div id="t-visite" style="display:none"><div id="visit-list"></div></div>
-    <div id="t-disponibilita" style="display:none">
-      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Attiva o disattiva la disponibilita.</p>
-      <div id="avail-list"></div>
     </div>
   </div>
 </div>
@@ -420,7 +392,7 @@ window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('nav-contatti').addEventListener('click', function() { openOverlay('contatti-ov'); });
   document.getElementById('close-contatti').addEventListener('click', function() { closeOverlay('contatti-ov'); });
   document.getElementById('lang-btn').addEventListener('click', switchLang);
-  document.getElementById('admin-btn').addEventListener('click', openAdminLogin);
+
 
   // Gallery
   document.getElementById('close-gallery').addEventListener('click', function() { closeOverlay('gallery-ov'); });
@@ -429,7 +401,7 @@ window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('close-cand').addEventListener('click', function() { closeOverlay('cand-ov'); });
   document.getElementById('cancel-cand').addEventListener('click', function() { closeOverlay('cand-ov'); });
   document.getElementById('submit-cand').addEventListener('click', submitCand);
-  document.getElementById('f-tipo').addEventListener('change', toggleTipo);
+
 
   // Visita
   document.getElementById('close-visit').addEventListener('click', function() { closeOverlay('visit-ov'); });
@@ -437,15 +409,13 @@ window.addEventListener('DOMContentLoaded', function() {
   document.getElementById('submit-visit').addEventListener('click', submitVisit);
 
   // Login
-  document.getElementById('cancel-login').addEventListener('click', function() { closeOverlay('login-ov'); });
-  document.getElementById('do-login').addEventListener('click', checkLogin);
-  document.getElementById('admin-pwd').addEventListener('keydown', function(e) { if (e.key === 'Enter') checkLogin(); });
+
+
+
 
   // Admin
-  document.getElementById('close-admin').addEventListener('click', function() { closeOverlay('admin-ov'); });
-  document.querySelectorAll('.atab').forEach(function(btn) {
-    btn.addEventListener('click', function() { showTab(this.dataset.tab, this); });
-  });
+
+
 
   // Success
   document.getElementById('close-success').addEventListener('click', function() { closeOverlay('success-ov', true); });
@@ -492,10 +462,7 @@ function renderRooms() {
       img.src = photos[0];
       imgDiv.appendChild(img);
     }
-    var placeholder = document.createElement('div');
-    placeholder.className = 'room-placeholder';
-    placeholder.innerHTML = '<div>📷</div><p>' + (it ? 'Foto in arrivo' : 'Photos coming soon') + '</p>';
-    imgDiv.appendChild(placeholder);
+
 
     var badge = document.createElement('span');
     badge.className = 'avail-badge ' + (avail ? 'avail' : 'not-avail');
@@ -524,7 +491,7 @@ function renderRooms() {
 
     var fromEl = document.createElement('div');
     fromEl.className = 'room-from';
-    fromEl.textContent = it ? 'All-inclusive · Disponibile da metà settembre 2026' : 'All-inclusive · Available from mid-September 2026';
+    fromEl.textContent = it ? 'All-inclusive · Compila il form o chiama +39 331 566 8588' : 'All-inclusive · Fill the form or call +39 331 566 8588';
     body.appendChild(fromEl);
 
     var tagsDiv = document.createElement('div');
@@ -587,26 +554,82 @@ function submitCand() {
   var cognome = document.getElementById('f-cognome').value.trim();
   var email = document.getElementById('f-email').value.trim();
   var tel = document.getElementById('f-tel').value.trim();
-  var tipo = document.getElementById('f-tipo').value;
+  var tipo = '';
   var din = document.getElementById('f-din').value;
   var dout = document.getElementById('f-dout').value;
-  var bio = document.getElementById('f-bio').value.trim();
-  if (!nome || !cognome || !email || !tel || !tipo || !din || !dout || !bio) {
-    alert('Compila tutti i campi obbligatori (*)'); return;
+  var bio = '';
+  var nascita = document.getElementById('f-nascita').value;
+  var luogoNascita = document.getElementById('f-luogo-nascita').value.trim();
+  var naz = document.getElementById('f-naz').value.trim();
+  var cf = document.getElementById('f-cf').value.trim().toUpperCase();
+  var residenza = document.getElementById('f-residenza').value.trim();
+  var tipoDoc = document.getElementById('f-tipo-doc').value;
+  var numDoc = document.getElementById('f-num-doc').value.trim();
+  var docRilasciato = document.getElementById('f-doc-rilasciato').value.trim();
+  var docData = document.getElementById('f-doc-data').value;
+  if (!nome || !cognome || !email) {
+    alert('Nome, cognome ed email sono obbligatori.'); return;
   }
   var c = {
     id: Date.now(), nome: nome + ' ' + cognome, email: email, tel: tel, tipo: tipo,
     camera: selectedRoom.name, din: din, dout: dout, bio: bio,
-    univ: document.getElementById('f-univ').value,
-    azienda: document.getElementById('f-azienda').value,
+    nascita: nascita, luogoNascita: luogoNascita, naz: naz, cf: cf,
+    residenza: residenza, tipoDoc: tipoDoc, numDoc: numDoc,
+    docRilasciato: docRilasciato, docData: docData,
+    univ: '',
+    azienda: '',
+    garNome: document.getElementById('f-gar-nome').value.trim(),
+    garCf: document.getElementById('f-gar-cf').value.trim().toUpperCase(),
+    garRes: document.getElementById('f-gar-res').value.trim(),
     status: 'pending', ts: new Date().toLocaleString('it-IT')
   };
   candidature.push(c);
   safeSet('m20_cand', candidature);
   closeOverlay('cand-ov');
   showSuccess('Candidatura inviata!', 'Abbiamo ricevuto la tua richiesta. Ti risponderemo entro 24 ore.');
+  function opt(label, val) { return val ? label + val : label + '(da completare)'; }
+  var emailBody = [
+    '=== DATI PER CONTRATTO - ' + selectedRoom.name + ' ===',
+    '',
+    'CONDUTTORE',
+    opt('Nome e Cognome: ', c.nome),
+    opt('Nato/a a: ', c.luogoNascita ? c.luogoNascita + ' il ' + c.nascita : ''),
+    opt('Nazionalita: ', c.naz),
+    opt('Codice Fiscale: ', c.cf),
+    opt('Residenza: ', c.residenza),
+    '',
+    'DOCUMENTO',
+    opt('Tipo: ', c.tipoDoc),
+    opt('Numero: ', c.numDoc),
+    opt('Rilasciato da: ', c.docRilasciato),
+    opt('Data rilascio: ', c.docData),
+    '',
+    'CONTATTI',
+    opt('Email: ', c.email),
+    opt('Tel: ', c.tel),
+    '',
+    'SITUAZIONE',
+    opt('Tipo: ', c.tipo),
+    (c.univ ? 'Universita: ' + c.univ : ''),
+    (c.azienda ? 'Azienda: ' + c.azienda : ''),
+    '',
+    (c.garNome || c.garCf ? 'GARANTE' : ''),
+    (c.garNome ? 'Nome: ' + c.garNome : ''),
+    (c.garCf ? 'CF: ' + c.garCf : ''),
+    (c.garRes ? 'Residenza: ' + c.garRes : ''),
+    '',
+    'LOCAZIONE',
+    opt('Camera: ', c.camera),
+    opt('Dal: ', c.din),
+    opt('Al: ', c.dout),
+    '',
+    'PRESENTAZIONE',
+    c.bio || '(da completare)',
+    '',
+    'Ricevuto: ' + c.ts
+  ].filter(function(x){return x !== '';}).join('\n');
   sendEmail('[Mazzini 20] Candidatura ' + selectedRoom.name, c.nome, c.email, c.tel, c.tipo,
-    c.univ || c.azienda || '-', c.camera, '-', c.din, c.dout, c.bio, '-', c.ts);
+    c.univ || c.azienda || '-', c.camera, '-', c.din, c.dout, emailBody, '-', c.ts);
 }
 
 // ── VISITA ────────────────────────────────────────────────────────────────
@@ -626,6 +649,9 @@ function submitVisit() {
     time: document.getElementById('v-time').value || '-',
     camera: document.getElementById('v-cam').value,
     note: document.getElementById('v-note').value,
+    garNome: document.getElementById('f-gar-nome').value.trim(),
+    garCf: document.getElementById('f-gar-cf').value.trim().toUpperCase(),
+    garRes: document.getElementById('f-gar-res').value.trim(),
     status: 'pending', ts: new Date().toLocaleString('it-IT')
   };
   visite.push(v);
@@ -813,12 +839,12 @@ function switchLang() {
   document.getElementById('sub-app').textContent = it ? 'Via Mazzini 20, secondo piano con ascensore, a pochi passi da Piazza Bodoni nel cuore di Torino.' : 'Via Mazzini 20, second floor with elevator, steps from Piazza Bodoni in the heart of Turin.';
   document.getElementById('lbl-cam').textContent = it ? 'Disponibilita camere' : 'Room availability';
   document.getElementById('h-cam').textContent = it ? 'Scegli la tua camera' : 'Choose your room';
-  document.getElementById('sub-cam').textContent = it ? 'Camere disponibili da meta settembre 2026. Canone all-inclusive a partire da 750/mese per contratti inferiori a 12 mesi.' : 'Rooms available from mid-September 2026. All-inclusive rent starting from 750/month for contracts under 12 months.';
-  var fTIT = ['Arredi nuovi 2026','Parquet in legno','2 bagni ristrutturati','Lavatrice','Internet veloce','Cucina abitabile con balcone','Infissi doppio vetro','Posteggio bici','Chiave personale','Asciugamani inclusi'];
-  var fTEN = ['New furniture 2026','Hardwood floors','2 renovated bathrooms','Washing machine','Fast internet','Eat-in kitchen with balcony','Double-glazed windows','Bike parking','Personal key','Towels included'];
-  var fDIT = ['Ogni camera arredata con cura e dotata di biancheria completa','Parquet in legno nelle camere','Due bagni completi con box doccia, WC, bidet e lavabo','Lavatrice condivisa in cucina','Connessione internet inclusa nel canone','Cucina completa con forno, frigo, tavolo, sedie e servizio completo','Serramenti moderni per isolamento termico e acustico','Cortile interno per il parcheggio biciclette','Ogni camera ha la propria chiave per la massima privacy','Doppio set di asciugamani incluso per ogni camera'];
-  var fDEN = ['Each room carefully furnished and equipped with full linen','Hardwood floors in all bedrooms','Two fully renovated bathrooms with shower box','Shared washing machine in kitchen','Internet included in rent','Full kitchen with balcony, oven, fridge, table, chairs and accessories','Modern frames for thermal and acoustic insulation','Building courtyard for bicycle parking','Each room has its own key for maximum privacy','Double set of towels included per room'];
-  for (var i = 1; i <= 10; i++) {
+  document.getElementById('sub-cam').textContent = it ? 'Canone all-inclusive a partire da 750/mese per contratti inferiori a 12 mesi. Compila il form o chiama il +39 331 566 8588.' : 'All-inclusive rent from 750/month for contracts under 12 months. Fill the form or call +39 331 566 8588.';
+  var fTIT = ['Arredi nuovi 2026','2 bagni ristrutturati','Lavatrice','Internet veloce','Cucina abitabile con balcone','Infissi doppio vetro','Posteggio bici','Chiave personale','Biancheria inclusa'];
+  var fTEN = ['New furniture 2026','2 renovated bathrooms','Washing machine','Fast internet','Eat-in kitchen with balcony','Double-glazed windows','Bike parking','Personal key','Linen included'];
+  var fDIT = ['Ogni camera arredata con cura e dotata di biancheria completa','Due bagni completi con box doccia, WC, bidet e lavabo','Lavatrice condivisa in cucina','Connessione internet inclusa nel canone','Cucina completa con forno, frigo, tavolo, sedie e servizio completo','Serramenti moderni per isolamento termico e acustico','Cortile interno per il parcheggio biciclette','Ogni camera ha la propria chiave per la massima privacy','Biancheria e asciugamani inclusi per ogni camera'];
+  var fDEN = ['Each room carefully furnished and equipped with full linen','Two fully renovated bathrooms with shower box','Shared washing machine in kitchen','Internet included in rent','Full kitchen with balcony, oven, fridge, table, chairs and accessories','Modern frames for thermal and acoustic insulation','Building courtyard for bicycle parking','Each room has its own key for maximum privacy','Linen and towels included per room'];
+  for (var i = 1; i <= 9; i++) {
     var h = document.getElementById('f'+i+'t');
     var p = document.getElementById('f'+i+'d');
     if (h) h.textContent = it ? fTIT[i-1] : fTEN[i-1];
