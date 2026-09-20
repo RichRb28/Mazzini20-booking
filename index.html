@@ -251,11 +251,7 @@ footer strong{color:rgba(255,255,255,0.7)}
       <div class="fgroup"><label>Data rilascio *</label><input type="date" id="f-doc-data"></div>
       <div class="fgroup"><label>Data validit&agrave; documento *</label><input type="date" id="f-doc-valid"></div>
     </div>
-    <div class="fgroup">
-      <label>Foto/scansione documento (fronte e retro) *</label>
-      <input type="file" id="f-allegati" multiple accept="image/*,.pdf" style="padding:6px;font-size:11px">
-      <p style="font-size:10px;color:#7a6f65;margin-top:4px">JPG, PNG o PDF. Max ~2MB totali.</p>
-    </div>
+
     <div class="frow">
       <div class="fgroup"><label>Email *</label><input type="email" id="f-email" placeholder="tua@email.com"></div>
       <div class="fgroup"><label>Telefono *</label><input type="tel" id="f-tel" placeholder="+39 ..."></div>
@@ -628,31 +624,7 @@ function submitCand() {
     '',
     'Ricevuto: ' + c.ts
   ].filter(function(x){return x !== '';}).join('\n');
-  // Handle file attachments: read as base64 and append links to email body
-  var fileInput = document.getElementById('f-allegati');
-  var files = fileInput ? fileInput.files : [];
-  if (files && files.length > 0) {
-    var readers = [];
-    var results = [];
-    var total = files.length;
-    var done = 0;
-    for (var fi = 0; fi < total; fi++) {
-      (function(f, idx) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          results[idx] = '\n[Allegato ' + (idx+1) + ': ' + f.name + ']\n' + e.target.result;
-          done++;
-          if (done === total) {
-            var fullBody = emailBody + '\n\n=== ALLEGATI ===\n' + results.join('\n---\n');
-            sendEmail('[Mazzini 20] Candidatura ' + selectedRoom.name, c.nome, c.email, c.tel, c.camera, c.din, c.dout, fullBody, c.ts);
-          }
-        };
-        reader.readAsDataURL(f);
-      })(files[fi], fi);
-    }
-  } else {
-    sendEmail('[Mazzini 20] Candidatura ' + selectedRoom.name, c.nome, c.email, c.tel, c.camera, c.din, c.dout, emailBody, c.ts);
-  }
+  sendEmail('[Mazzini 20] Candidatura ' + selectedRoom.name, c.nome, c.email, c.tel, c.camera, c.din, c.dout, emailBody, c.ts);
 }
 
 // ── VISITA ────────────────────────────────────────────────────────────────
