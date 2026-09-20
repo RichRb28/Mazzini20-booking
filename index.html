@@ -249,6 +249,7 @@ footer strong{color:rgba(255,255,255,0.7)}
     <div class="frow">
       <div class="fgroup"><label>Rilasciato da *</label><input type="text" id="f-doc-rilasciato" placeholder="es. Comune di Torino"></div>
       <div class="fgroup"><label>Data rilascio *</label><input type="date" id="f-doc-data"></div>
+      <div class="fgroup"><label>Data validit&agrave; documento *</label><input type="date" id="f-doc-valid"></div>
     </div>
     <div class="frow">
       <div class="fgroup"><label>Email *</label><input type="email" id="f-email" placeholder="tua@email.com"></div>
@@ -256,6 +257,11 @@ footer strong{color:rgba(255,255,255,0.7)}
     </div>
 
     <div class="sec-title">Garante (opzionale)</div>
+    <div class="fgroup">
+      <label>Allegati (foto documento, selfie, altro — max 3 file)</label>
+      <input type="file" id="f-allegati" multiple accept="image/*,.pdf" style="padding:6px;font-size:11px">
+      <p style="font-size:10px;color:#7a6f65;margin-top:4px">Formati: JPG, PNG, PDF. Max ~2MB totali per EmailJS.</p>
+    </div>
     <div class="frow">
       <div class="fgroup"><label>Nome garante</label><input type="text" id="f-gar-nome" placeholder="Nome e cognome"></div>
       <div class="fgroup"><label>CF garante</label><input type="text" id="f-gar-cf" placeholder="Codice fiscale" style="text-transform:uppercase"></div>
@@ -567,6 +573,7 @@ function submitCand() {
   var numDoc = document.getElementById('f-num-doc').value.trim();
   var docRilasciato = document.getElementById('f-doc-rilasciato').value.trim();
   var docData = document.getElementById('f-doc-data').value;
+  var docValid = document.getElementById('f-doc-valid').value;
   if (!nome || !cognome || !email) {
     alert('Nome, cognome ed email sono obbligatori.'); return;
   }
@@ -575,7 +582,7 @@ function submitCand() {
     camera: selectedRoom.name, din: din, dout: dout, bio: bio,
     nascita: nascita, luogoNascita: luogoNascita, naz: naz, cf: cf,
     residenza: residenza, tipoDoc: tipoDoc, numDoc: numDoc,
-    docRilasciato: docRilasciato, docData: docData,
+    docRilasciato: docRilasciato, docData: docData, docValid: docValid,
     univ: '',
     azienda: '',
     garNome: document.getElementById('f-gar-nome').value.trim(),
@@ -603,15 +610,11 @@ function submitCand() {
     opt('Numero: ', c.numDoc),
     opt('Rilasciato da: ', c.docRilasciato),
     opt('Data rilascio: ', c.docData),
+    opt('Data validita: ', c.docValid),
     '',
     'CONTATTI',
     opt('Email: ', c.email),
     opt('Tel: ', c.tel),
-    '',
-    'SITUAZIONE',
-    opt('Tipo: ', c.tipo),
-    (c.univ ? 'Universita: ' + c.univ : ''),
-    (c.azienda ? 'Azienda: ' + c.azienda : ''),
     '',
     (c.garNome || c.garCf ? 'GARANTE' : ''),
     (c.garNome ? 'Nome: ' + c.garNome : ''),
@@ -623,13 +626,33 @@ function submitCand() {
     opt('Dal: ', c.din),
     opt('Al: ', c.dout),
     '',
-    'PRESENTAZIONE',
-    c.bio || '(da completare)',
-    '',
     'Ricevuto: ' + c.ts
   ].filter(function(x){return x !== '';}).join('\n');
-  sendEmail('[Mazzini 20] Candidatura ' + selectedRoom.name, c.nome, c.email, c.tel, c.tipo,
-    c.univ || c.azienda || '-', c.camera, '-', c.din, c.dout, emailBody, '-', c.ts);
+  // Handle file attachments: read as base64 and append links to email body
+  var fileInput = document.getElementById('f-allegati');
+  var files = fileInput ? fileInput.files : [];
+  if (files && files.length > 0) {
+    var readers = [];
+    var results = [];
+    var total = files.length;
+    var done = 0;
+    for (var fi = 0; fi < total; fi++) {
+      (function(f, idx) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          results[idx] = '\n[Allegato ' + (idx+1) + ': ' + f.name + ']\n' + e.target.result;
+          done++;
+          if (done === total) {
+            var fullBody = emailBody + '\n\n=== ALLEGATI ===\n' + results.join('\n---\n');
+            sendEmail('[Mazzini 20] Candidatura ' + selectedRoom.name, c.nome, c.email, c.tel, c.camera, c.din, c.dout, fullBody, c.ts);
+          }
+        };
+        reader.readAsDataURL(f);
+      })(files[fi], fi);
+    }
+  } else {
+    sendEmail('[Mazzini 20] Candidatura ' + selectedRoom.name, c.nome, c.email, c.tel, c.camera, c.din, c.dout, emailBody, c.ts);
+  }
 }
 
 // ── VISITA ────────────────────────────────────────────────────────────────
@@ -658,17 +681,23 @@ function submitVisit() {
   safeSet('m20_visite', visite);
   closeOverlay('visit-ov');
   showSuccess('Visita richiesta!', 'Ti contatteremo entro 24 ore per confermare data e orario.');
-  sendEmail('[Mazzini 20] Visita ' + v.camera, v.nome, v.email, v.tel, 'Visita',
-    '-', v.camera, '-', v.day + ' ' + v.time, '-', v.note || '-', '-', v.ts);
+  sendEmail('[Mazzini 20] Visita ' + v.camera, v.nome, v.email, v.tel, v.camera, v.data, '', 'Richiesta visita il ' + v.data + ' alle ' + v.ora + (v.note ? '\nNote: ' + v.note : '') + '\nRicevuto: ' + v.ts, v.ts);
 }
 
 // ── EMAIL ─────────────────────────────────────────────────────────────────
-function sendEmail(subject, nome, email, tel, tipo, univ, camera, prezzo, datain, dataout, bio, doc, ts) {
+function sendEmail(subject, nome, email, tel, camera, datain, dataout, message, ts) {
   if (typeof emailjs === 'undefined') return;
   emailjs.send(EMAILJS_SID, EMAILJS_TID, {
-    to_email: OWNER_EMAIL, subject: subject, nome: nome, email: email,
-    tel: tel, tipo: tipo, univ_azienda: univ, camera: camera, prezzo: prezzo,
-    datain: datain, dataout: dataout, bio: bio, documento: doc, timestamp: ts
+    to_email: OWNER_EMAIL,
+    subject: subject,
+    nome: nome,
+    email: email,
+    tel: tel,
+    camera: camera,
+    datain: datain,
+    dataout: dataout,
+    message: message,
+    timestamp: ts
   });
 }
 
