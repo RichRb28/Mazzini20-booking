@@ -251,17 +251,17 @@ footer strong{color:rgba(255,255,255,0.7)}
       <div class="fgroup"><label>Data rilascio *</label><input type="date" id="f-doc-data"></div>
       <div class="fgroup"><label>Data validit&agrave; documento *</label><input type="date" id="f-doc-valid"></div>
     </div>
+    <div class="fgroup">
+      <label>Foto/scansione documento (fronte e retro) *</label>
+      <input type="file" id="f-allegati" multiple accept="image/*,.pdf" style="padding:6px;font-size:11px">
+      <p style="font-size:10px;color:#7a6f65;margin-top:4px">JPG, PNG o PDF. Max ~2MB totali.</p>
+    </div>
     <div class="frow">
       <div class="fgroup"><label>Email *</label><input type="email" id="f-email" placeholder="tua@email.com"></div>
       <div class="fgroup"><label>Telefono *</label><input type="tel" id="f-tel" placeholder="+39 ..."></div>
     </div>
 
     <div class="sec-title">Garante (opzionale)</div>
-    <div class="fgroup">
-      <label>Allegati (foto documento, selfie, altro — max 3 file)</label>
-      <input type="file" id="f-allegati" multiple accept="image/*,.pdf" style="padding:6px;font-size:11px">
-      <p style="font-size:10px;color:#7a6f65;margin-top:4px">Formati: JPG, PNG, PDF. Max ~2MB totali per EmailJS.</p>
-    </div>
     <div class="frow">
       <div class="fgroup"><label>Nome garante</label><input type="text" id="f-gar-nome" placeholder="Nome e cognome"></div>
       <div class="fgroup"><label>CF garante</label><input type="text" id="f-gar-cf" placeholder="Codice fiscale" style="text-transform:uppercase"></div>
